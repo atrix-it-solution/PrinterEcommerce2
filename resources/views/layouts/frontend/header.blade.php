@@ -7,7 +7,7 @@
                                 <li><a href="mailto:info@printhelp.com"><i class="fa-solid fa-envelope"></i> info@printhelp.com</a></li>
                             </ul>
                         </div>
-                        <div class="col-lg-6">
+                        <div class="col-lg-6 d-none d-lg-block">
                             <div class="offer_slider common_slider">
                                 <div class="offer_slide text-center">
                                     <p class="mb-0">Winter sale discount off 30%! <a href="#">Shop now</a></p>

@@ -1,6 +1,6 @@
 /* <![CDATA[ */
 
-jQuery(document).ready(function() {
+jQuery(document).ready(function () {
     jQuery(".offer_slider").slick({
         arrows: false,
         dots: false,
@@ -9,7 +9,7 @@ jQuery(document).ready(function() {
         slidesToShow: 1,
         slidesToScroll: 1,
     });
-    
+
     jQuery(".hero_slider").slick({
         arrows: true,
         dots: true,
@@ -22,11 +22,11 @@ jQuery(document).ready(function() {
                 breakpoint: 700,
                 settings: {
                     arrows: false,
-                }
-            }
-        ]
+                },
+            },
+        ],
     });
-    
+
     jQuery(".new_arrival_slider").slick({
         arrows: true,
         dots: false,
@@ -40,21 +40,21 @@ jQuery(document).ready(function() {
                 breakpoint: 1199,
                 settings: {
                     slidesToShow: 3,
-                }
+                },
             },
             {
                 breakpoint: 991,
                 settings: {
                     slidesToShow: 2,
-                }
+                },
             },
             {
                 breakpoint: 575,
                 settings: {
                     slidesToShow: 2,
-                }
-            }
-        ]
+                },
+            },
+        ],
     });
 
     jQuery(".best_seller_slider").slick({
@@ -70,24 +70,23 @@ jQuery(document).ready(function() {
                 breakpoint: 1199,
                 settings: {
                     slidesToShow: 3,
-                }
+                },
             },
             {
                 breakpoint: 991,
                 settings: {
                     slidesToShow: 2,
-                }
+                },
             },
             {
                 breakpoint: 575,
                 settings: {
                     slidesToShow: 2,
-                }
-            }
-        ]
+                },
+            },
+        ],
     });
-    
-    
+
     jQuery(".testimonial_slider").slick({
         arrows: true,
         dots: false,
@@ -101,13 +100,13 @@ jQuery(document).ready(function() {
                 breakpoint: 1199,
                 settings: {
                     slidesToShow: 3,
-                }
+                },
             },
             {
                 breakpoint: 991,
                 settings: {
                     slidesToShow: 2,
-                }
+                },
             },
             {
                 breakpoint: 767,
@@ -116,117 +115,115 @@ jQuery(document).ready(function() {
                     arrows: false,
                     dots: true,
                     autoplaySpeed: 8000,
-                }
-            }
-        ]
+                },
+            },
+        ],
     });
 
-    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+    const tooltipTriggerList = document.querySelectorAll(
+        '[data-bs-toggle="tooltip"]'
+    );
+    const tooltipList = [...tooltipTriggerList].map(
+        (tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl)
+    );
 
     // Change tab on hover instead of click
-    document.querySelectorAll('#pills-tab [data-bs-toggle="pill"]').forEach(tab => {
-        tab.addEventListener('mouseenter', function () {
-        let tabTrigger = new bootstrap.Tab(this);
-        tabTrigger.show();
-        });
-    });
-
-    
-
-    $(".search-trigger").click(function() {
-        $('#searchbar').addClass("active");
-    });
-    $("#closeSearch").click(function() {
-        $('#searchbar').removeClass("active");
-    });
-
-    document.getElementById("shipAddress").addEventListener("change", function() {
-        const collapseElement = document.getElementById("shipping_fields");
-        const collapse = new bootstrap.Collapse(collapseElement, {
-            toggle: false // prevent auto toggle on init
+    document
+        .querySelectorAll('#pills-tab [data-bs-toggle="pill"]')
+        .forEach((tab) => {
+            tab.addEventListener("mouseenter", function () {
+                let tabTrigger = new bootstrap.Tab(this);
+                tabTrigger.show();
+            });
         });
 
-        if (this.checked) {
-            collapse.show();
-        } else {
-            collapse.hide();
-        }
+    $(".search-trigger").click(function () {
+        $("#searchbar").addClass("active");
     });
+    $("#closeSearch").click(function () {
+        $("#searchbar").removeClass("active");
+    });
+
+    document
+        .getElementById("shipAddress")
+        .addEventListener("change", function () {
+            const collapseElement = document.getElementById("shipping_fields");
+            const collapse = new bootstrap.Collapse(collapseElement, {
+                toggle: false, // prevent auto toggle on init
+            });
+
+            if (this.checked) {
+                collapse.show();
+            } else {
+                collapse.hide();
+            }
+        });
 });
-
-
 
 /* ]]&gt; */
 
-
 // single product page js code
 var swiper = new Swiper(".mySwiper", {
-  spaceBetween: 10,
-  slidesPerView: 4,
-  freeMode: true,
-  watchSlidesProgress: true,
-  direction: "vertical",
+    spaceBetween: 10,
+    slidesPerView: 4,
+    freeMode: true,
+    watchSlidesProgress: true,
+    direction: "vertical",
 
-  // ✅ Responsive breakpoints
-  breakpoints: {
-    0: {
-      direction: "horizontal", // 992px se niche
-      slidesPerView: 4
+    // ✅ Responsive breakpoints
+    breakpoints: {
+        0: {
+            direction: "horizontal", // 992px se niche
+            slidesPerView: 4,
+        },
+        992: {
+            direction: "vertical", // 992px se upar
+            slidesPerView: 4,
+        },
     },
-    992: {
-      direction: "vertical",   // 992px se upar
-      slidesPerView: 4
-    }
-  }
 });
 
 var swiper2 = new Swiper(".mySwiper2", {
-  spaceBetween: 10,
-  navigation: {
-    nextEl: ".swiper-button-next",
-    prevEl: ".swiper-button-prev",
-  },
-  thumbs: {
-    swiper: swiper,
-  },
+    spaceBetween: 10,
+    navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+    },
+    thumbs: {
+        swiper: swiper,
+    },
 });
 
-
-
-// zoom effect 
+// zoom effect
 // $("#zoomImage").ezPlus();
 
-
-
-
 // Clear localStorage on frontend logout
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener("DOMContentLoaded", function () {
     // Check if user is logged out using data attribute
-    const isAuthenticated = document.documentElement.getAttribute('data-is-authenticated') === 'true';
-    
+    const isAuthenticated =
+        document.documentElement.getAttribute("data-is-authenticated") ===
+        "true";
+
     if (!isAuthenticated) {
-        localStorage.removeItem('auth_token');
-        localStorage.removeItem('user');
-        localStorage.removeItem('token_expires_at');
+        localStorage.removeItem("auth_token");
+        localStorage.removeItem("user");
+        localStorage.removeItem("token_expires_at");
     }
-    
+
     // Add logout confirmation
     const logoutForms = document.querySelectorAll('form[action*="logout"]');
-    logoutForms.forEach(form => {
-        form.addEventListener('submit', function(e) {
+    logoutForms.forEach((form) => {
+        form.addEventListener("submit", function (e) {
             e.preventDefault();
-                // Clear localStorage
-                localStorage.removeItem('auth_token');
-                localStorage.removeItem('user');
-                localStorage.removeItem('token_expires_at');
-                // Submit the form
-                this.submit();
-            
+            // Clear localStorage
+            localStorage.removeItem("auth_token");
+            localStorage.removeItem("user");
+            localStorage.removeItem("token_expires_at");
+            // Submit the form
+            this.submit();
         });
     });
 });
-
 
 // custom.js - Main functionality including wishlist
 class CustomApp {
@@ -249,8 +246,10 @@ class CustomApp {
 
     setupWishlistEventListeners() {
         // Event delegation for wishlist buttons
-        document.addEventListener('click', (e) => {
-            const wishlistBtn = e.target.closest('.wishlist-toggle, .wishlist-btn');
+        document.addEventListener("click", (e) => {
+            const wishlistBtn = e.target.closest(
+                ".wishlist-toggle, .wishlist-btn"
+            );
             if (wishlistBtn) {
                 e.preventDefault();
                 this.handleWishlistToggle(wishlistBtn);
@@ -259,78 +258,92 @@ class CustomApp {
     }
 
     handleWishlistToggle(button) {
-        const productId = button.getAttribute('data-product-id');
-        const productTitle = button.getAttribute('data-product-title');
-        const heartIcon = button.querySelector('i');
-        
+        const productId = button.getAttribute("data-product-id");
+        const productTitle = button.getAttribute("data-product-title");
+        const heartIcon = button.querySelector("i");
+
         if (!productId) {
-            console.error('No product ID found for wishlist toggle');
+            console.error("No product ID found for wishlist toggle");
             return;
         }
 
         // Show loading state
         const originalClass = heartIcon.className;
-        heartIcon.className = 'fa-solid fa-spinner fa-spin';
+        heartIcon.className = "fa-solid fa-spinner fa-spin";
 
         // Get CSRF token
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        const csrfToken = document
+            .querySelector('meta[name="csrf-token"]')
+            .getAttribute("content");
 
         // Toggle wishlist via AJAX
         fetch('{{ route("wishlist.toggle") }}', {
-            method: 'POST',
+            method: "POST",
             headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': csrfToken,
-                'Accept': 'application/json'
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": csrfToken,
+                Accept: "application/json",
             },
             body: JSON.stringify({
-                product_id: productId
-            })
+                product_id: productId,
+            }),
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.success) {
-                // Update icon
-                if (data.in_wishlist) {
-                    heartIcon.className = 'fa-solid fa-heart text-danger';
-                    button.setAttribute('data-bs-title', 'Remove from Wishlist');
-                    this.showToast('success', `${productTitle} added to wishlist`);
-                } else {
-                    heartIcon.className = 'fa-regular fa-heart';
-                    button.setAttribute('data-bs-title', 'Add to Wishlist');
-                    this.showToast('info', `${productTitle} removed from wishlist`);
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
                 }
+                return response.json();
+            })
+            .then((data) => {
+                if (data.success) {
+                    // Update icon
+                    if (data.in_wishlist) {
+                        heartIcon.className = "fa-solid fa-heart text-danger";
+                        button.setAttribute(
+                            "data-bs-title",
+                            "Remove from Wishlist"
+                        );
+                        this.showToast(
+                            "success",
+                            `${productTitle} added to wishlist`
+                        );
+                    } else {
+                        heartIcon.className = "fa-regular fa-heart";
+                        button.setAttribute("data-bs-title", "Add to Wishlist");
+                        this.showToast(
+                            "info",
+                            `${productTitle} removed from wishlist`
+                        );
+                    }
 
-                // Update tooltip
-                this.updateTooltip(button);
+                    // Update tooltip
+                    this.updateTooltip(button);
 
-                // Update wishlist count
-                this.updateWishlistCount(data.wishlist_count);
-            } else {
-                throw new Error(data.message || 'Failed to update wishlist');
-            }
-        })
-        .catch(error => {
-            console.error('Wishlist error:', error);
-            heartIcon.className = originalClass;
-            this.showToast('error', 'Failed to update wishlist');
-        });
+                    // Update wishlist count
+                    this.updateWishlistCount(data.wishlist_count);
+                } else {
+                    throw new Error(
+                        data.message || "Failed to update wishlist"
+                    );
+                }
+            })
+            .catch((error) => {
+                console.error("Wishlist error:", error);
+                heartIcon.className = originalClass;
+                this.showToast("error", "Failed to update wishlist");
+            });
     }
 
     updateWishlistCount(count) {
-        const wishlistCountElements = document.querySelectorAll('.wishlist-count');
-        wishlistCountElements.forEach(element => {
+        const wishlistCountElements =
+            document.querySelectorAll(".wishlist-count");
+        wishlistCountElements.forEach((element) => {
             if (element) {
                 element.textContent = count;
                 if (count > 0) {
-                    element.style.display = 'inline';
+                    element.style.display = "inline";
                 } else {
-                    element.style.display = 'none';
+                    element.style.display = "none";
                 }
             }
         });
@@ -339,22 +352,22 @@ class CustomApp {
     loadWishlistCount() {
         fetch('{{ route("wishlist.data") }}', {
             headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'Accept': 'application/json'
-            }
+                "X-Requested-With": "XMLHttpRequest",
+                Accept: "application/json",
+            },
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            this.updateWishlistCount(data.wishlist_count);
-        })
-        .catch(error => {
-            console.error('Error loading wishlist count:', error);
-        });
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json();
+            })
+            .then((data) => {
+                this.updateWishlistCount(data.wishlist_count);
+            })
+            .catch((error) => {
+                console.error("Error loading wishlist count:", error);
+            });
     }
 
     // Cart functionality
@@ -365,28 +378,28 @@ class CustomApp {
     loadCartCount() {
         fetch('{{ route("cart.data") }}', {
             headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'Accept': 'application/json'
-            }
+                "X-Requested-With": "XMLHttpRequest",
+                Accept: "application/json",
+            },
         })
-        .then(response => response.json())
-        .then(data => {
-            this.updateCartCount(data.cart_count);
-        })
-        .catch(error => {
-            console.error('Error loading cart count:', error);
-        });
+            .then((response) => response.json())
+            .then((data) => {
+                this.updateCartCount(data.cart_count);
+            })
+            .catch((error) => {
+                console.error("Error loading cart count:", error);
+            });
     }
 
     updateCartCount(count) {
-        const cartCountElements = document.querySelectorAll('.cart-count');
-        cartCountElements.forEach(element => {
+        const cartCountElements = document.querySelectorAll(".cart-count");
+        cartCountElements.forEach((element) => {
             if (element) {
                 element.textContent = count;
                 if (count > 0) {
-                    element.style.display = 'inline';
+                    element.style.display = "inline";
                 } else {
-                    element.style.display = 'none';
+                    element.style.display = "none";
                 }
             }
         });
@@ -395,7 +408,7 @@ class CustomApp {
     // Toast notifications
     showToast(type, message) {
         // Your existing toast implementation
-        const toast = document.createElement('div');
+        const toast = document.createElement("div");
         toast.className = `toast align-items-center text-bg-${type} border-0`;
         toast.innerHTML = `
             <div class="d-flex">
@@ -404,11 +417,12 @@ class CustomApp {
             </div>
         `;
 
-        let toastContainer = document.getElementById('toastContainer');
+        let toastContainer = document.getElementById("toastContainer");
         if (!toastContainer) {
-            toastContainer = document.createElement('div');
-            toastContainer.id = 'toastContainer';
-            toastContainer.className = 'toast-container position-fixed top-0 end-0 p-3';
+            toastContainer = document.createElement("div");
+            toastContainer.id = "toastContainer";
+            toastContainer.className =
+                "toast-container position-fixed top-0 end-0 p-3";
             document.body.appendChild(toastContainer);
         }
 
@@ -416,7 +430,7 @@ class CustomApp {
         const bsToast = new bootstrap.Toast(toast);
         bsToast.show();
 
-        toast.addEventListener('hidden.bs.toast', () => {
+        toast.addEventListener("hidden.bs.toast", () => {
             toast.remove();
         });
     }
@@ -433,19 +447,19 @@ class CustomApp {
     // Search functionality
     initializeSearch() {
         // Your search implementation
-        const searchTrigger = document.querySelector('.search-trigger');
-        const closeSearch = document.getElementById('closeSearch');
-        const searchbar = document.getElementById('searchbar');
+        const searchTrigger = document.querySelector(".search-trigger");
+        const closeSearch = document.getElementById("closeSearch");
+        const searchbar = document.getElementById("searchbar");
 
         if (searchTrigger && searchbar) {
-            searchTrigger.addEventListener('click', () => {
-                searchbar.style.display = 'block';
+            searchTrigger.addEventListener("click", () => {
+                searchbar.style.display = "block";
             });
         }
 
         if (closeSearch && searchbar) {
-            closeSearch.addEventListener('click', () => {
-                searchbar.style.display = 'none';
+            closeSearch.addEventListener("click", () => {
+                searchbar.style.display = "none";
             });
         }
     }
@@ -457,8 +471,8 @@ class CustomApp {
 
     initializeSliders() {
         // Your slick slider initialization
-        if (typeof $.fn.slick !== 'undefined') {
-            $('.common_slider').slick({
+        if (typeof $.fn.slick !== "undefined") {
+            $(".common_slider").slick({
                 dots: false,
                 arrows: false,
                 infinite: true,
@@ -466,14 +480,14 @@ class CustomApp {
                 slidesToShow: 1,
                 adaptiveHeight: true,
                 autoplay: true,
-                autoplaySpeed: 3000
+                autoplaySpeed: 3000,
             });
         }
     }
 }
 
 // Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener("DOMContentLoaded", function () {
     window.customApp = new CustomApp();
 });
 
@@ -501,3 +515,32 @@ function fetchCartCount() {
         window.customApp.loadCartCount();
     }
 }
+$(".cat_box_wrapper").slick({
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 2000,
+    arrows: true,
+    dots: false,
+    // ✅ Responsive settings
+    responsive: [
+        {
+            breakpoint: 1024, // tablet
+            settings: {
+                slidesToShow: 3,
+            },
+        },
+        {
+            breakpoint: 768, // small tablet
+            settings: {
+                slidesToShow: 2,
+            },
+        },
+        {
+            breakpoint: 576, // mobile
+            settings: {
+                slidesToShow: 1,
+            },
+        },
+    ],
+});

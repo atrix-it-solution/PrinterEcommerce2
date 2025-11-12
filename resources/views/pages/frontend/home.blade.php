@@ -37,16 +37,39 @@
 
     <section class="category_sec py-5">
         <div class="container">
-            <div class="row">
+              
+            <div class="cat_box_wrapper">
                 @foreach($categories as $index => $category)
-                <div class="col-md-6 col-xl-3 my-3">
-                     <div class="cat_box">
+                <div class="px-2">
+                    <div class="cat_box">
                         <a href="{{ route('category.show', $category->slug) }}" class="cat_img p-4">
                             <img src="{{ asset($category->categoryImage->url) }}" alt="Grocery" class="img-fluid" />
                         </a>
                         <div class="cat_content  d-flex flex-column justify-content-between">
                             <div class="cat-heading">
-                                <h4><a href="{{ route('category.show', $category->slug) }}">{{ $category->title }}  </a></h4>
+                                <h4><a href="{{ route('category.show', $category->slug) }}">{{ $category->title }} </a></h4>
+                                <p>{{ $category->products_count ?? 0 }} items</p>
+                            </div>
+                            <div class="cat-btn">
+                                <a href="{{ route('category.show', $category->slug) }}" class=" d-inline-block">Shop now <i class="fa-solid fa-arrow-up"></i> </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 @endforeach
+
+            </div>
+           
+            <!-- <div class="row">
+                @foreach($categories as $index => $category)
+                <div class="col-md-6 col-xl-3 my-3">
+                    <div class="cat_box">
+                        <a href="{{ route('category.show', $category->slug) }}" class="cat_img p-4">
+                            <img src="{{ asset($category->categoryImage->url) }}" alt="Grocery" class="img-fluid" />
+                        </a>
+                        <div class="cat_content  d-flex flex-column justify-content-between">
+                            <div class="cat-heading">
+                                <h4><a href="{{ route('category.show', $category->slug) }}">{{ $category->title }} </a></h4>
                                 <p>{{ $category->products_count ?? 0 }} items</p>
                             </div>
                             <div class="cat-btn">
@@ -56,7 +79,7 @@
                     </div>
                 </div>
                 @endforeach
-                <!-- <div class="col-md-6 col-xl-3 my-3">
+                <div class="col-md-6 col-xl-3 my-3">
                      <div class="cat_box">
                         <a href="#" class="cat_img p-4">
                              <img src="{{ asset('assets/frontend/images/cat_2.jpg') }}" alt="Garments" class="img-fluid" />
@@ -103,8 +126,8 @@
                             </div>
                         </div>
                     </div>
-                </div> -->
-            </div>
+                </div>
+            </div> -->
         </div>
     </section>
 
@@ -160,7 +183,7 @@
             </div>
             @if($products->count() > 0)
             <div class="product_slider new_arrival_slider common_slider">
-                 @include('partials.product_slider', ['products' => $products])
+                @include('partials.product_slider', ['products' => $products])
                 <!-- <div>
                     <div class="product_box">
                         <a href="#" class="product_img">
@@ -358,21 +381,21 @@
                 <div class="col-lg-6 order-lg-1">
                     <div class="tab-content" id="pills-tabContent">
                         @foreach($categories as $index => $category)
-                                <div class="tab-pane fade {{ $index == 0 ? 'show active' : '' }}" 
-                                    id="pills-category-{{ $category->id }}" 
-                                    role="tabpanel" 
-                                    aria-labelledby="pills-category-{{ $category->id }}-tab" 
-                                    tabindex="0">
-                                    <div class="img_box">
-                                        @if($category->categoryImage)
-                                            <img src="{{ asset($category->categoryImage->url) }}" alt="{{ $category->title }}" class="img-fluid w-100" />
-                                        @else
-                                           
-                                            <img src="{{ asset('assets/frontend/images/best_collection_' . ($index + 1) . '.png') }}" alt="{{ $category->title }}" class="img-fluid w-100" />
-                                        @endif
-                                    </div>
-                                </div>
-                                @endforeach
+                        <div class="tab-pane fade {{ $index == 0 ? 'show active' : '' }}"
+                            id="pills-category-{{ $category->id }}"
+                            role="tabpanel"
+                            aria-labelledby="pills-category-{{ $category->id }}-tab"
+                            tabindex="0">
+                            <div class="img_box">
+                                @if($category->categoryImage)
+                                <img src="{{ asset($category->categoryImage->url) }}" alt="{{ $category->title }}" class="img-fluid w-100" />
+                                @else
+
+                                <img src="{{ asset('assets/frontend/images/best_collection_' . ($index + 1) . '.png') }}" alt="{{ $category->title }}" class="img-fluid w-100" />
+                                @endif
+                            </div>
+                        </div>
+                        @endforeach
                         <!-- <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0">
                                     <div class="img_box">
                                         <img src="{{ asset('assets/frontend/images/best_collection_2.png') }}" alt="Essentials" class="img-fluid w-100" />
@@ -395,18 +418,18 @@
                         <h5 class="subheading fw-normal text-dark pb-lg-3 text-uppercase text-theme"><small>Best Collections</small></h5>
                         <ul class="list-unstyled m-0" id="pills-tab" role="tablist">
                             @foreach($categories as $index => $category)
-                                    <li class="nav-item pb-2 pb-lg-4 mb-2" role="presentation">
-                                        <h2 class="nav-link ffs {{ $index == 0 ? 'active' : '' }}" 
-                                            id="pills-category-{{ $category->id }}-tab" 
-                                            data-bs-toggle="pill" 
-                                            data-bs-target="#pills-category-{{ $category->id }}" 
-                                            role="tab" 
-                                            aria-controls="pills-category-{{ $category->id }}" 
-                                            aria-selected="{{ $index == 0 ? 'true' : 'false' }}">
-                                            <a href="javascript:void(0);">{{ $category->title }}</a>
-                                        </h2>
-                                    </li>
-                                    @endforeach
+                            <li class="nav-item pb-2 pb-lg-4 mb-2" role="presentation">
+                                <h2 class="nav-link ffs {{ $index == 0 ? 'active' : '' }}"
+                                    id="pills-category-{{ $category->id }}-tab"
+                                    data-bs-toggle="pill"
+                                    data-bs-target="#pills-category-{{ $category->id }}"
+                                    role="tab"
+                                    aria-controls="pills-category-{{ $category->id }}"
+                                    aria-selected="{{ $index == 0 ? 'true' : 'false' }}">
+                                    <a href="javascript:void(0);">{{ $category->title }}</a>
+                                </h2>
+                            </li>
+                            @endforeach
                             <!-- <li class="nav-item pb-2 pb-lg-4 mb-2" role="presentation">
                                         <h2 class="nav-link ffs" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false"><a href="javascript:void(0);">Envy Printers</a></h2>
                                     </li>
@@ -599,105 +622,105 @@
 <script src="{{ asset('assets/frontend/js/wishlist.js') }}"></script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Add to Cart functionality for home page products
-    const addToCartButtons = document.querySelectorAll('.add-to-cart');
-    
-    addToCartButtons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            const productId = this.getAttribute('data-product-id');
-            const productTitle = this.getAttribute('data-product-title');
-            const productPrice = this.getAttribute('data-product-price');
-            const productImage = this.getAttribute('data-product-image');
-            const productSlug = this.getAttribute('data-product-slug');
-            
-            addToCart(productId, productTitle, productPrice, productImage, productSlug, this);
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add to Cart functionality for home page products
+        const addToCartButtons = document.querySelectorAll('.add-to-cart');
+
+        addToCartButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                const productId = this.getAttribute('data-product-id');
+                const productTitle = this.getAttribute('data-product-title');
+                const productPrice = this.getAttribute('data-product-price');
+                const productImage = this.getAttribute('data-product-image');
+                const productSlug = this.getAttribute('data-product-slug');
+
+                addToCart(productId, productTitle, productPrice, productImage, productSlug, this);
+            });
         });
-    });
 
-    function addToCart(productId, productTitle, productPrice, productImage, productSlug, button) {
-        // Show loading state
-        const originalText = button.textContent;
-        button.textContent = 'Adding...';
-        button.disabled = true;
+        function addToCart(productId, productTitle, productPrice, productImage, productSlug, button) {
+            // Show loading state
+            const originalText = button.textContent;
+            button.textContent = 'Adding...';
+            button.disabled = true;
 
-        // Get CSRF token
-        const csrfToken = document.querySelector('meta[name="csrf-token"]') ? 
-            document.querySelector('meta[name="csrf-token"]').getAttribute('content') : 
-            '{{ csrf_token() }}';
+            // Get CSRF token
+            const csrfToken = document.querySelector('meta[name="csrf-token"]') ?
+                document.querySelector('meta[name="csrf-token"]').getAttribute('content') :
+                '{{ csrf_token() }}';
 
-        // Send AJAX request to add to cart
-        fetch('{{ route("cart.add") }}', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': csrfToken,
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({
-                product_id: productId,
-                quantity: 1
-            })
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.success) {
-                // Update cart count
-                updateCartCount(data.cart_count);
-                
-                // Show success message
-                showToast('success', productTitle + ' has been added to your cart.', true);
-                
-                // Reset button after delay
-                setTimeout(() => {
+            // Send AJAX request to add to cart
+            fetch('{{ route("cart.add") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        product_id: productId,
+                        quantity: 1
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        // Update cart count
+                        updateCartCount(data.cart_count);
+
+                        // Show success message
+                        showToast('success', productTitle + ' has been added to your cart.', true);
+
+                        // Reset button after delay
+                        setTimeout(() => {
+                            button.textContent = originalText;
+                            button.disabled = false;
+                        }, 2000);
+                    } else {
+                        throw new Error(data.message || 'Failed to add product to cart');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showToast('error', 'Failed to add product to cart');
+
+                    // Reset button
                     button.textContent = originalText;
                     button.disabled = false;
-                }, 2000);
-            } else {
-                throw new Error(data.message || 'Failed to add product to cart');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            showToast('error', 'Failed to add product to cart');
-            
-            // Reset button
-            button.textContent = originalText;
-            button.disabled = false;
-        });
-    }
+                });
+        }
 
-    function updateCartCount(count) {
-        const cartCountElements = document.querySelectorAll('.cart-count-badge, .header-cart .count');
-        cartCountElements.forEach(element => {
-            element.textContent = count;
-            if (count > 0) {
-                element.style.display = 'inline';
-            } else {
-                element.style.display = 'none';
-            }
-        });
-    }
+        function updateCartCount(count) {
+            const cartCountElements = document.querySelectorAll('.cart-count-badge, .header-cart .count');
+            cartCountElements.forEach(element => {
+                element.textContent = count;
+                if (count > 0) {
+                    element.style.display = 'inline';
+                } else {
+                    element.style.display = 'none';
+                }
+            });
+        }
 
-    function showToast(type, message, showViewCart = false) {
-        // Create toast element
-        const toast = document.createElement('div');
-        toast.className = `toast align-items-center text-bg-${type === 'success' ? 'success' : 'danger'} border-0`;
-        toast.setAttribute('role', 'alert');
-        toast.setAttribute('aria-live', 'assertive');
-        toast.setAttribute('aria-atomic', 'true');
-        
-        let toastBody = '';
-        if (showViewCart) {
-            toastBody = `
+        function showToast(type, message, showViewCart = false) {
+            // Create toast element
+            const toast = document.createElement('div');
+            toast.className = `toast align-items-center text-bg-${type === 'success' ? 'success' : 'danger'} border-0`;
+            toast.setAttribute('role', 'alert');
+            toast.setAttribute('aria-live', 'assertive');
+            toast.setAttribute('aria-atomic', 'true');
+
+            let toastBody = '';
+            if (showViewCart) {
+                toastBody = `
                 <div class="d-flex align-items-center">
                     <div class="toast-body flex-grow-1 small">
                         ${message}
@@ -708,8 +731,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>
             `;
-        } else {
-            toastBody = `
+            } else {
+                toastBody = `
                 <div class="d-flex">
                     <div class="toast-body">
                         ${message}
@@ -717,62 +740,59 @@ document.addEventListener('DOMContentLoaded', function() {
                     <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>
             `;
-        }
-        
-        toast.innerHTML = toastBody;
-        
-        // Add to toast container
-        let toastContainer = document.getElementById('toastContainer');
-        if (!toastContainer) {
-            toastContainer = document.createElement('div');
-            toastContainer.id = 'toastContainer';
-            toastContainer.className = 'toast-container position-fixed top-0 end-0 p-3';
-            document.body.appendChild(toastContainer);
-        }
-        
-        toastContainer.appendChild(toast);
-        
-        // Initialize and show toast
-        const bsToast = new bootstrap.Toast(toast, {
-            autohide: showViewCart ? false : true,
-            delay: showViewCart ? 5000 : 3000
-        });
-        bsToast.show();
-        
-        // Remove toast from DOM after hide
-        toast.addEventListener('hidden.bs.toast', () => {
-            toast.remove();
-        });
-    }
-
-    // Load cart count on page load
-    function loadCartCount() {
-        fetch('{{ route("cart.data") }}', {
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'Accept': 'application/json'
             }
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
+
+            toast.innerHTML = toastBody;
+
+            // Add to toast container
+            let toastContainer = document.getElementById('toastContainer');
+            if (!toastContainer) {
+                toastContainer = document.createElement('div');
+                toastContainer.id = 'toastContainer';
+                toastContainer.className = 'toast-container position-fixed top-0 end-0 p-3';
+                document.body.appendChild(toastContainer);
             }
-            return response.json();
-        })
-        .then(data => {
-            updateCartCount(data.cart_count);
-        })
-        .catch(error => {
-            console.error('Error loading cart count:', error);
-        });
-    }
 
-    // Initialize cart count
-    loadCartCount();
-});
+            toastContainer.appendChild(toast);
 
+            // Initialize and show toast
+            const bsToast = new bootstrap.Toast(toast, {
+                autohide: showViewCart ? false : true,
+                delay: showViewCart ? 5000 : 3000
+            });
+            bsToast.show();
 
+            // Remove toast from DOM after hide
+            toast.addEventListener('hidden.bs.toast', () => {
+                toast.remove();
+            });
+        }
 
+        // Load cart count on page load
+        function loadCartCount() {
+            fetch('{{ route("cart.data") }}', {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    updateCartCount(data.cart_count);
+                })
+                .catch(error => {
+                    console.error('Error loading cart count:', error);
+                });
+        }
+
+        // Initialize cart count
+        loadCartCount();
+    });
 </script>
 
 @endsection
