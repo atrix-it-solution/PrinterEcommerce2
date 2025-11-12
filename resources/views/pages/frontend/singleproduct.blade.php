@@ -24,7 +24,7 @@
             <div class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="d-flex">
                     <div class="toast-body">
-                        <span id="toastMessage"></span> 
+                        <span id="toastMessage"></span>
                         <a href="{{ route('cart.view') }}" class="btn btn-light btn-sm ms-2">View Cart</a>
                     </div>
                     <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -32,24 +32,24 @@
             </div>
         </div>
 
-    
+
         <div class="row gx-lg-5 mb-3">
             <div class="col-lg-6 my-2">
                 <div class="product_gallery">
                     <div id="product-gallery" class="slider-pro">
                         <div class="sp-slides">
-                             @if($product->galleryImages->count() > 0)
-                                @foreach($product->galleryImages as $index => $image)
-                                 <div class="sp-slide">
-                                    <a href="{{ Storage::url($image->file_path) }}" class="full_icon">
-                                        <i class="fa-solid fa-expand"></i>
-                                    </a>
-                                    <img class="sp-image img-fluid" src="{{ Storage::url($image->file_path) }}" alt="{{ $product->title }} - Image {{ $index + 1 }}" />
-                                </div>
-                                @endforeach
-                                 @endif
+                            @if($product->galleryImages->count() > 0)
+                            @foreach($product->galleryImages as $index => $image)
+                            <div class="sp-slide">
+                                <a href="{{ Storage::url($image->file_path) }}" class="full_icon">
+                                    <i class="fa-solid fa-expand"></i>
+                                </a>
+                                <img class="sp-image img-fluid" src="{{ Storage::url($image->file_path) }}" alt="{{ $product->title }} - Image {{ $index + 1 }}" />
+                            </div>
+                            @endforeach
+                            @endif
 
-                            
+
                             <!-- <div class="sp-slide">
                                 <a href="{{ asset('assets/images/product_img1.jpg') }}" class="full_icon">
                                     <i class="fa-solid fa-expand"></i>
@@ -85,10 +85,10 @@
 
                         <!-- Thumbnails -->
                         <div class="sp-thumbnails">
-                             @if($product->galleryImages->count() > 0)
-                                @foreach($product->galleryImages as $image)
-                                <img class="sp-thumbnail img-fluid" src="{{ Storage::url($image->file_path) }}" alt="{{ $product->title }} thumbnail" />
-                                @endforeach
+                            @if($product->galleryImages->count() > 0)
+                            @foreach($product->galleryImages as $image)
+                            <img class="sp-thumbnail img-fluid" src="{{ Storage::url($image->file_path) }}" alt="{{ $product->title }} thumbnail" />
+                            @endforeach
                             @endif
                             <!-- <img class="sp-thumbnail img-fluid" src="{{asset ('assets/images/product_img1.jpg')}}" alt="Product Thumb 1" />
                             <img class="sp-thumbnail img-fluid" src="{{asset ('assets/images/product_img11.jpg')}}" alt="Product Thumb 2" />
@@ -105,27 +105,27 @@
                     <div class="stock pt-1">
                         <span class="badge border rounded-pill {{ $product->stock_quantity > 0 || is_null($product->stock_quantity) ? 'instock' : 'outofstock' }}">
                             @if(is_null($product->stock_quantity))
-                                In Stock
+                            In Stock
                             @else
-                                {{ $product->stock_quantity > 0 ? 'In Stock' : 'Out of Stock' }}
+                            {{ $product->stock_quantity > 0 ? 'In Stock' : 'Out of Stock' }}
                             @endif
                         </span>
                     </div>
                     <div class="product-price pt-2">
-                         @if($product->sale_price && $product->sale_price < $product->regular_price)
-                        <p class="price">
-                            <del><bdi><span class="woocommerce-Price-currencySymbol">$</span>{{ number_format($product->regular_price, 2) }}</bdi></del>
-                            <ins><bdi><span class="woocommerce-Price-currencySymbol">$</span>{{ number_format($product->sale_price, 2) }}</bdi></ins>
-                             @php
+                        @if($product->sale_price && $product->sale_price < $product->regular_price)
+                            <p class="price">
+                                <del><bdi><span class="woocommerce-Price-currencySymbol">$</span>{{ number_format($product->regular_price, 2) }}</bdi></del>
+                                <ins><bdi><span class="woocommerce-Price-currencySymbol">$</span>{{ number_format($product->sale_price, 2) }}</bdi></ins>
+                                @php
                                 $discount = (($product->regular_price - $product->sale_price) / $product->regular_price) * 100;
-                            @endphp
-                            <span class="sale-off fw-bold">{{ round($discount) }}% OFF</span>
-                        </p>
-                         @else
-                        <p class="price">
-                            <ins><bdi><span class="woocommerce-Price-currencySymbol">$</span>{{ number_format($product->regular_price, 2) }}</bdi></ins>
-                        </p>
-                        @endif
+                                @endphp
+                                <span class="sale-off fw-bold">{{ round($discount) }}% OFF</span>
+                            </p>
+                            @else
+                            <p class="price">
+                                <ins><bdi><span class="woocommerce-Price-currencySymbol">$</span>{{ number_format($product->regular_price, 2) }}</bdi></ins>
+                            </p>
+                            @endif
                     </div>
                     <!-- <div class="short_desc pb-2">
                         <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Id commodi eaque voluptatibus illo, exercitationem minus natus, doloremque amet similique in dolore non quae pariatur dolorum laboriosam qui dolores nesciunt rem!</p>
@@ -135,8 +135,8 @@
                         @csrf
                         <input type="hidden" name="product_id" value="{{ $product->id }}">
                         <div class="product-atc-group product-type-simple d-flex flex-wrap gap-3 align-items-end">
-                             @if(!is_null($product->stock_quantity) && $product->stock_quantity > 0 || is_null($product->stock_quantity))
-                            <div class="product-quantity">
+                            @if(!is_null($product->stock_quantity) && $product->stock_quantity > 0 || is_null($product->stock_quantity))
+                            <!-- <div class="product-quantity">
                                 <div class="quantity__label em-font-semibold text-start">Quantity:</div>
                                 <div class="quantity">
                                     <span class="icon--minus qty-button" type="button">
@@ -151,28 +151,30 @@
                                         </svg>
                                     </span>
                                 </div>
-                            </div>
-                            <button type="submit" name="add-to-cart" class="single_add_to_cart_button btn btn-dark" id="addToCartBtn">
-                                <span class="btn-text">Add to cart</span>
+                            </div> -->
+                            <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Open modal for @mdo</button> -->
+                            <button type="submit" name="add-to-cart" class="single_add_to_cart_button btn btn-dark" id="addToCartBtn-" data-bs-toggle="modal" data-bs-target="#quoteFormModal" data-bs-whatever="@product-query">
+                                <span class="btn-text">Get a Quote</span>
+
                                 <div class="spinner-border spinner-border-sm d-none" role="status">
                                     <span class="visually-hidden">Loading...</span>
                                 </div>
                             </button>
-                             @else
-                             <button type="button" class="btn btn-secondary" disabled>Out of Stock</button>
+                            @else
+                            <button type="button" class="btn btn-secondary" disabled>Out of Stock</button>
                             @endif
-                            <div class="product_wishlist_btn">
-                                <a href="#" class="wishlist-toggle" 
-                                data-bs-toggle="tooltip" 
-                                data-bs-placement="top" 
-                                data-bs-custom-class="custom-tooltip" 
-                                data-bs-title="Add to wishlist"
-                                data-product-id="{{ $product->id }}"
-                                data-product-title="{{ $product->title }}"
-                                data-in-wishlist="{{ $product->isInWishlist ? 'true' : 'false' }}">
+                            <!-- <div class="product_wishlist_btn">
+                                <a href="#" class="wishlist-toggle"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="top"
+                                    data-bs-custom-class="custom-tooltip"
+                                    data-bs-title="Add to wishlist"
+                                    data-product-id="{{ $product->id }}"
+                                    data-product-title="{{ $product->title }}"
+                                    data-in-wishlist="{{ $product->isInWishlist ? 'true' : 'false' }}">
                                     <i class="fa-regular fa-heart"></i>
                                 </a>
-                            </div>
+                            </div> -->
                         </div>
                     </form>
 
@@ -187,10 +189,10 @@
                         <div class="posted_in">
                             <span class="fw-semibold">Category: </span>
                             @foreach($product->categories as $index => $category)
-                                <a href="{{ route('category.show', $category->slug) }}" rel="tag">{{ $category->title }}</a>
-                                @if(!$loop->last), @endif
+                            <a href="{{ route('category.show', $category->slug) }}" rel="tag">{{ $category->title }}</a>
+                            @if(!$loop->last), @endif
                             @endforeach
-                        </div>  
+                        </div>
                     </div>
                 </div>
             </div>
@@ -202,11 +204,11 @@
                     <h4 class="accordion-header accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#descriptionTab" aria-expanded="false" aria-controls="descriptionTab">Description</h4>
                     <div id="descriptionTab" class="accordion-collapse collapse" data-bs-parent="#productTabs">
                         <div class="accordion-body">
-                             {!! $product->description !!}
+                            {!! $product->description !!}
                         </div>
                     </div>
                 </div>
-               
+
                 <div class="accordion-item">
                     <h4 class="accordion-header accordion-button" data-bs-toggle="collapse" data-bs-target="#reviewTab" aria-expanded="true" aria-controls="reviewTab">Reviews</h4>
                     <div id="reviewTab" class="accordion-collapse collapse show" data-bs-parent="#productTabs">
@@ -219,7 +221,7 @@
                                 </div>
                                 <div id="comments">
                                     <button class="form-review px-4 px-2 btn btn-outline-dark ms-auto d-none" type="button" data-bs-toggle="modal" data-bs-target="#review-form">Write a review</button>
- 
+
                                     <ol class="commentlist">
                                         <li class="review">
                                             <div class="comment_container">
@@ -286,48 +288,48 @@
         <div class="cusheading_row text-center pb-4">
             <h2>Related products</h2>
         </div>
-        <ul class="productlist column-4">
-             @foreach($relatedProducts as $relatedProduct)
+        <ul class="productlist column-lg-4 col-6">
+            @foreach($relatedProducts as $relatedProduct)
             <li>
                 <div class="product_box">
                     <a href="{{ route('product.show', $relatedProduct->slug) }}" class="product_img">
-                          @if($relatedProduct->featuredImage)
+                        @if($relatedProduct->featuredImage)
                         <img src="{{ Storage::url($relatedProduct->featuredImage->file_path) }}" alt="{{ $product->title }}" class="img-fluid" />
-                           @endif
+                        @endif
                         <div class="cart_btn">
                             <button class="cusbtn cartbtn">Add to cart</button>
                         </div>
                     </a>
-                     
+
                     <div class="product_meta">
                         @if($relatedProduct->sale_price && $relatedProduct->sale_price < $relatedProduct->regular_price)
-                        @php
+                            @php
                             $discount = (($relatedProduct->regular_price - $relatedProduct->sale_price) / $relatedProduct->regular_price) * 100;
-                        @endphp
-                        <div class="discount_percent">-{{ round($discount) }}%</div>
-                         @endif
-                        <div class="wishlist">
-                            <span class="wishlist-toggle wishlist-btn" 
-                                data-bs-toggle="tooltip" 
-                                data-bs-placement="top" 
-                                data-bs-custom-class="custom-tooltip" 
-                                data-bs-title="Add to Wishlist"
-                                data-product-id="{{ $product->id }}"
-                                data-product-title="{{ $product->title }}">
-                                <i class="fa-regular fa-heart"></i>
-                            </span>
-                        </div>
+                            @endphp
+                            <div class="discount_percent">-{{ round($discount) }}%</div>
+                            @endif
+                            <div class="wishlist">
+                                <span class="wishlist-toggle wishlist-btn"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="top"
+                                    data-bs-custom-class="custom-tooltip"
+                                    data-bs-title="Add to Wishlist"
+                                    data-product-id="{{ $product->id }}"
+                                    data-product-title="{{ $product->title }}">
+                                    <i class="fa-regular fa-heart"></i>
+                                </span>
+                            </div>
                     </div>
-                    
+
                     <div class="product_content">
                         <h4><a href="{{ route('product.show', $relatedProduct->slug) }}">{{ $relatedProduct->title }}</a></h4>
                         <div class="price">
                             @if($relatedProduct->sale_price && $relatedProduct->sale_price < $relatedProduct->regular_price)
-                            <del>${{ number_format($relatedProduct->regular_price, 2) }}</del>
-                            <ins>${{ number_format($relatedProduct->sale_price, 2) }}</ins>
-                            @else
-                            <ins>${{ number_format($relatedProduct->regular_price, 2) }}</ins>
-                            @endif
+                                <del>${{ number_format($relatedProduct->regular_price, 2) }}</del>
+                                <ins>${{ number_format($relatedProduct->sale_price, 2) }}</ins>
+                                @else
+                                <ins>${{ number_format($relatedProduct->regular_price, 2) }}</ins>
+                                @endif
                         </div>
                         <div class="rating">
                             <span class="fa-solid fa-star"></span>
@@ -339,8 +341,8 @@
                     </div>
                 </div>
             </li>
-             @endforeach
-            
+            @endforeach
+
         </ul>
     </div>
 </section>
@@ -355,251 +357,264 @@
 <script src="{{ asset('assets/frontend/js/wishlist.js') }}"></script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Quantity buttons functionality
-    function initializeQuantityButtons() {
-        const quantityInput = document.getElementById('quantity');
-        const minusButton = document.querySelector('.icon--minus');
-        const plusButton = document.querySelector('.icon--plus');
-        
-        if (!quantityInput || !minusButton || !plusButton) return;
-        
-        function updateButtons() {
-            const currentValue = parseInt(quantityInput.value);
-            const minValue = parseInt(quantityInput.min) || 1;
-            const maxValue = parseInt(quantityInput.max) || Infinity;
-            
-            // Update minus button state
-            minusButton.style.opacity = currentValue <= minValue ? '0.5' : '1';
-            minusButton.style.cursor = currentValue <= minValue ? 'not-allowed' : 'pointer';
-            
-            // Update plus button state
-            plusButton.style.opacity = currentValue >= maxValue ? '0.5' : '1';
-            plusButton.style.cursor = currentValue >= maxValue ? 'not-allowed' : 'pointer';
-        }
-        
-        // Minus button functionality
-        minusButton.addEventListener('click', function() {
-            let currentValue = parseInt(quantityInput.value);
-            const minValue = parseInt(quantityInput.min) || 1;
-            
-            if (currentValue > minValue) {
-                quantityInput.value = currentValue - 1;
-                updateButtons();
-            }
-        });
-        
-        // Plus button functionality
-        plusButton.addEventListener('click', function() {
-            let currentValue = parseInt(quantityInput.value);
-            const maxValue = parseInt(quantityInput.max) || Infinity;
-            
-            if (currentValue < maxValue) {
-                quantityInput.value = currentValue + 1;
-                updateButtons();
-            }
-        });
-        
-        // Input validation
-        quantityInput.addEventListener('change', function() {
-            let currentValue = parseInt(this.value);
-            const minValue = parseInt(this.min) || 1;
-            const maxValue = parseInt(this.max) || Infinity;
-            
-            if (isNaN(currentValue) || currentValue < minValue) {
-                this.value = minValue;
-            } else if (currentValue > maxValue) {
-                this.value = maxValue;
-            }
-            
-            updateButtons();
-        });
-        
-        // Input event for real-time validation
-        quantityInput.addEventListener('input', function() {
-            this.value = this.value.replace(/[^0-9]/g, '');
-        });
-        
-        // Initialize button states
-        updateButtons();
-    }
-    
-    initializeQuantityButtons();
-
-    // Add to cart functionality
-     const addToCartForm = document.getElementById('addToCartForm');
-    if (addToCartForm) {
-        addToCartForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const submitBtn = document.getElementById('addToCartBtn');
-            const btnText = submitBtn.querySelector('.btn-text');
-            const spinner = submitBtn.querySelector('.spinner-border');
+    document.addEventListener('DOMContentLoaded', function() {
+        // Quantity buttons functionality
+        function initializeQuantityButtons() {
             const quantityInput = document.getElementById('quantity');
-            
-            // Show loading state
-            btnText.textContent = 'Adding...';
-            spinner.classList.remove('d-none');
-            submitBtn.disabled = true;
-            
-            try {
-                // Get CSRF token safely
-                const csrfToken = document.querySelector('meta[name="csrf-token"]') ? 
-                    document.querySelector('meta[name="csrf-token"]').getAttribute('content') : 
-                    '{{ csrf_token() }}';
-                
-                // Submit form via AJAX
-                const response = await fetch(this.action, {
-                    method: 'POST',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'X-CSRF-TOKEN': csrfToken,
-                        'Accept': 'application/json'
-                    },
-                    body: new FormData(this)
-                });
+            const minusButton = document.querySelector('.icon--minus');
+            const plusButton = document.querySelector('.icon--plus');
 
-                const data = await response.json();
+            if (!quantityInput || !minusButton || !plusButton) return;
 
-                if (!response.ok) {
-                    throw new Error(data.message || 'Server error');
+            function updateButtons() {
+                const currentValue = parseInt(quantityInput.value);
+                const minValue = parseInt(quantityInput.min) || 1;
+                const maxValue = parseInt(quantityInput.max) || Infinity;
+
+                // Update minus button state
+                minusButton.style.opacity = currentValue <= minValue ? '0.5' : '1';
+                minusButton.style.cursor = currentValue <= minValue ? 'not-allowed' : 'pointer';
+
+                // Update plus button state
+                plusButton.style.opacity = currentValue >= maxValue ? '0.5' : '1';
+                plusButton.style.cursor = currentValue >= maxValue ? 'not-allowed' : 'pointer';
+            }
+
+            // Minus button functionality
+            minusButton.addEventListener('click', function() {
+                let currentValue = parseInt(quantityInput.value);
+                const minValue = parseInt(quantityInput.min) || 1;
+
+                if (currentValue > minValue) {
+                    quantityInput.value = currentValue - 1;
+                    updateButtons();
+                }
+            });
+
+            // Plus button functionality
+            plusButton.addEventListener('click', function() {
+                let currentValue = parseInt(quantityInput.value);
+                const maxValue = parseInt(quantityInput.max) || Infinity;
+
+                if (currentValue < maxValue) {
+                    quantityInput.value = currentValue + 1;
+                    updateButtons();
+                }
+            });
+
+            // Input validation
+            quantityInput.addEventListener('change', function() {
+                let currentValue = parseInt(this.value);
+                const minValue = parseInt(this.min) || 1;
+                const maxValue = parseInt(this.max) || Infinity;
+
+                if (isNaN(currentValue) || currentValue < minValue) {
+                    this.value = minValue;
+                } else if (currentValue > maxValue) {
+                    this.value = maxValue;
                 }
 
-                if (data.success) {
-                    // Show success message with "View Cart" button
-                    showStaticToast('success', '{{ $product->title }} has been added to your cart.', true); 
-                    
-                    // Update cart count in header
-                    updateCartCount(data.cart_count);
-                    
-                    // Reset form quantity
-                    if (quantityInput) {
-                        quantityInput.value = 1;
+                updateButtons();
+            });
+
+            // Input event for real-time validation
+            quantityInput.addEventListener('input', function() {
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
+
+            // Initialize button states
+            updateButtons();
+        }
+
+        initializeQuantityButtons();
+
+        // Add to cart functionality
+        const addToCartForm = document.getElementById('addToCartForm');
+        if (addToCartForm) {
+            addToCartForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const submitBtn = document.getElementById('addToCartBtn');
+                const btnText = submitBtn.querySelector('.btn-text');
+                const spinner = submitBtn.querySelector('.spinner-border');
+                const quantityInput = document.getElementById('quantity');
+
+                // Show loading state
+                btnText.textContent = 'Adding...';
+                spinner.classList.remove('d-none');
+                submitBtn.disabled = true;
+
+                try {
+                    // Get CSRF token safely
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]') ?
+                        document.querySelector('meta[name="csrf-token"]').getAttribute('content') :
+                        '{{ csrf_token() }}';
+
+                    // Submit form via AJAX
+                    const response = await fetch(this.action, {
+                        method: 'POST',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRF-TOKEN': csrfToken,
+                            'Accept': 'application/json'
+                        },
+                        body: new FormData(this)
+                    });
+
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        throw new Error(data.message || 'Server error');
                     }
-                    
-                    // Update button to show "View Cart"
-                    setTimeout(() => {
-                        btnText.textContent = 'View Cart';
-                        submitBtn.classList.remove('btn-dark');
-                        submitBtn.classList.add('btn-success');
-                        submitBtn.type = 'button';
-                        submitBtn.onclick = function() {
-                            window.location.href = '{{ route("cart.view") }}';
-                        };
+
+                    if (data.success) {
+                        // Show success message with "View Cart" button
+                        showStaticToast('success', '{{ $product->title }} has been added to your cart.', true);
+
+                        // Update cart count in header
+                        updateCartCount(data.cart_count);
+
+                        // Reset form quantity
+                        if (quantityInput) {
+                            quantityInput.value = 1;
+                        }
+
+                        // Update button to show "View Cart"
+                        setTimeout(() => {
+                            btnText.textContent = 'View Cart';
+                            submitBtn.classList.remove('btn-dark');
+                            submitBtn.classList.add('btn-success');
+                            submitBtn.type = 'button';
+                            submitBtn.onclick = function() {
+                                window.location.href = '{{ route("cart.view") }}';
+                            };
+                            spinner.classList.add('d-none');
+                        }, 1000);
+
+                    } else {
+                        showStaticToast('error', data.message);
+                        // Reset button state on error
+                        btnText.textContent = 'Add to cart';
                         spinner.classList.add('d-none');
-                    }, 1000);
-                    
-                } else {
-                    showStaticToast('error', data.message);
+                        submitBtn.disabled = false;
+                    }
+
+                } catch (error) {
+                    console.error('Error:', error);
+                    let errorMessage = 'Something went wrong. Please try again.';
+
+                    if (error.message.includes('Server error')) {
+                        errorMessage = error.message;
+                    }
+
+                    showStaticToast('error', errorMessage);
+
                     // Reset button state on error
                     btnText.textContent = 'Add to cart';
                     spinner.classList.add('d-none');
                     submitBtn.disabled = false;
                 }
+            });
+        }
+    });
 
-            } catch (error) {
-                console.error('Error:', error);
-                let errorMessage = 'Something went wrong. Please try again.';
-                
-                if (error.message.includes('Server error')) {
-                    errorMessage = error.message;
-                }
-                
-                showStaticToast('error', errorMessage);
-                
-                // Reset button state on error
-                btnText.textContent = 'Add to cart';
-                spinner.classList.add('d-none');
-                submitBtn.disabled = false;
-            }
+
+    // Show/hide static toast function
+    function showStaticToast(type, message, showViewCart = false) {
+        const toastContainer = document.querySelector('.showToast');
+        const toastMessage = document.getElementById('toastMessage');
+        const toastElement = toastContainer.querySelector('.toast');
+
+        if (!toastContainer || !toastMessage) return;
+
+        // Update toast content
+        toastMessage.textContent = message;
+
+        // Update toast color based on type
+        toastElement.className = `toast align-items-center text-bg-${type === 'success' ? 'success' : 'danger'} border-0`;
+
+        // Show the toast container
+        toastContainer.classList.remove('d-none');
+
+        // Initialize and show Bootstrap toast
+        const bsToast = new bootstrap.Toast(toastElement, {
+            autohide: true,
+            delay: 50000
+        });
+        bsToast.show();
+
+        // Hide container when toast is hidden
+        toastElement.addEventListener('hidden.bs.toast', () => {
+            toastContainer.classList.add('d-none');
         });
     }
-});
-
-
-// Show/hide static toast function
-function showStaticToast(type, message, showViewCart = false) {
-    const toastContainer = document.querySelector('.showToast');
-    const toastMessage = document.getElementById('toastMessage');
-    const toastElement = toastContainer.querySelector('.toast');
-    
-    if (!toastContainer || !toastMessage) return;
-    
-    // Update toast content
-    toastMessage.textContent = message;
-    
-    // Update toast color based on type
-    toastElement.className = `toast align-items-center text-bg-${type === 'success' ? 'success' : 'danger'} border-0`;
-    
-    // Show the toast container
-    toastContainer.classList.remove('d-none');
-    
-    // Initialize and show Bootstrap toast
-    const bsToast = new bootstrap.Toast(toastElement, {
-        autohide: true,
-        delay: 50000
-    });
-    bsToast.show();
-    
-    // Hide container when toast is hidden
-    toastElement.addEventListener('hidden.bs.toast', () => {
-        toastContainer.classList.add('d-none');
-    });
-}
 
 
 
-// Load cart count on page load
-document.addEventListener('DOMContentLoaded', function() {
-    fetch('{{ route("cart.data") }}', {
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest',
-            'Accept': 'application/json'
-        }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        updateCartCount(data.cart_count);
-    })
-    .catch(error => {
-        console.error('Error loading cart count:', error);
-    });
-});
-
-// Slider Pro initialization
-jQuery(document).ready(function($) {
-    $('#product-gallery').sliderPro({
-        width: '100%',
-        height: 650,
-        fade: true,
-        arrows: true,
-        buttons: false,
-        thumbnailsPosition: 'bottom',
-        thumbnailWidth: 153,
-        thumbnailHeight: 153,
-        thumbnailArrows: true,
-        touchSwipe: true,
-        responsive: true,
-        autoScaleLayers: true,
-        imageScaleMode: 'contain',
-        shuffle: false,
-        autoplay: false
+    // Load cart count on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        fetch('{{ route("cart.data") }}', {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                updateCartCount(data.cart_count);
+            })
+            .catch(error => {
+                console.error('Error loading cart count:', error);
+            });
     });
 
-    // Initialize LightGallery
-    lightGallery(document.getElementById('product-gallery'), {
-        selector: '.sp-slide a',
-        thumbnail: true,
-        zoom: true,
-        download: false,
-        actualSize: false,
-        fullScreen: true
+    // Slider Pro initialization
+    jQuery(document).ready(function($) {
+        $('#product-gallery').sliderPro({
+            width: '100%',
+            height: 650,
+            fade: true,
+            arrows: true,
+            buttons: false,
+            thumbnailsPosition: 'bottom',
+            thumbnailWidth: 153,
+            thumbnailHeight: 153,
+            thumbnailArrows: true,
+            touchSwipe: true,
+            responsive: true,
+            autoScaleLayers: true,
+            imageScaleMode: 'contain',
+            shuffle: false,
+            autoplay: false,
+
+
+            breakpoints: {
+                1024: { // LG se niche (tablet and small screen)
+                    height: 450
+                },
+                768: { // MD screens
+                    height: 400
+                },
+                576: { // SM screens
+                    height: 350
+                }
+            }
+        });
+
+        // Initialize LightGallery
+        lightGallery(document.getElementById('product-gallery'), {
+            selector: '.sp-slide a',
+            thumbnail: true,
+            zoom: true,
+            download: false,
+            actualSize: false,
+            fullScreen: true
+        });
     });
-});
 </script>
 @endsection

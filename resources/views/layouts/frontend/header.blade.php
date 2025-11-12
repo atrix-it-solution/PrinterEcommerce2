@@ -2,12 +2,12 @@
             <div class="topbar bg-theme text-white py-2">
                 <div class="container-fluid px-lg-4">
                     <div class="row justify-content-center">
-                        <div class="col-lg-3">
+                        <div class="col-lg-3 col-6">
                             <ul class="topbar_info_list d-flex align-items-center justify-content-center justify-content-lg-start gap-4 mb-0 list-unstyled">
                                 <li><a href="mailto:info@printhelp.com"><i class="fa-solid fa-envelope"></i> info@printhelp.com</a></li>
                             </ul>
                         </div>
-                        <div class="col-lg-6">
+                        <div class="col-lg-6 d-none d-lg-flex">
                             <div class="offer_slider common_slider">
                                 <div class="offer_slide text-center">
                                     <p class="mb-0">Winter sale discount off 30%! <a href="#">Shop now</a></p>
@@ -20,7 +20,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-3">
+                        <div class="col-lg-3 col-6">
                             <ul class="topbar_info_list d-flex align-items-center justify-content-center justify-content-lg-end gap-4 mb-0 list-unstyled">
                                 <li><a href="tel:+919410109369"><i class="fa-solid fa-phone"></i> +91 12345-67890</a></li>
                             </ul>
