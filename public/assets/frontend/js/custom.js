@@ -228,276 +228,182 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-// custom.js - Main functionality including wishlist
-class CustomApp {
+
+
+
+// Quote Form Handling
+class QuoteForm {
     constructor() {
-        this.init();
+        this.form = document.getElementById('quoteForm');
+        this.submitBtn = document.getElementById('submitBtn');
+        this.messagesDiv = document.getElementById('formMessages');
+        
+        if (this.form) {
+            this.init();
+        }
     }
 
     init() {
-        this.initializeWishlist();
-        this.initializeCart();
-        this.initializeSearch();
-        this.initializeOtherFeatures();
-    }
-
-    // Wishlist functionality
-    initializeWishlist() {
-        this.setupWishlistEventListeners();
-        this.loadWishlistCount();
-    }
-
-    setupWishlistEventListeners() {
-        // Event delegation for wishlist buttons
-        document.addEventListener('click', (e) => {
-            const wishlistBtn = e.target.closest('.wishlist-toggle, .wishlist-btn');
-            if (wishlistBtn) {
-                e.preventDefault();
-                this.handleWishlistToggle(wishlistBtn);
-            }
+        this.form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.handleSubmit();
         });
+
+        // Auto-fill product data when modal is shown
+        this.setupModalListeners();
     }
 
-    handleWishlistToggle(button) {
-        const productId = button.getAttribute('data-product-id');
-        const productTitle = button.getAttribute('data-product-title');
-        const heartIcon = button.querySelector('i');
-        
-        if (!productId) {
-            console.error('No product ID found for wishlist toggle');
-            return;
+    setupModalListeners() {
+        const quoteModal = document.getElementById('quoteFormModal');
+        if (quoteModal) {
+            quoteModal.addEventListener('show.bs.modal', (event) => {
+                // Get the button that triggered the modal
+                const button = event.relatedTarget;
+                
+                // Extract product data from data attributes
+                const productId = button.getAttribute('data-product-id') || '';
+                const productName = button.getAttribute('data-product-name') || '';
+                const productPrice = button.getAttribute('data-product-price') || '';
+                const productUrl = button.getAttribute('data-product-url') || window.location.href;
+                
+                // Fill the form with product data
+                this.fillProductData(productId, productName, productPrice, productUrl);
+            });
+
+            // Reset form when modal is hidden
+            quoteModal.addEventListener('hidden.bs.modal', () => {
+                this.form.reset();
+                this.clearMessages();
+            });
         }
+    }
 
+    fillProductData(productId, productName, productPrice, productUrl) {
+        const productIdInput = document.getElementById('product_id');
+        const productNameInput = document.getElementById('product_name');
+        const productPriceInput = document.getElementById('product_price');
+        const productUrlInput = document.getElementById('product_url');
+        const subjectInput = document.getElementById('subject');
+        
+        
+        if (productIdInput) productIdInput.value = productId;
+        if (productNameInput) productNameInput.value = productName;
+        if (productPriceInput) productPriceInput.value = productPrice;
+        if (productUrlInput) productUrlInput.value = productUrl;
+        
+        // Auto-fill subject if product name is provided
+        if (subjectInput && productName && !subjectInput.value) {
+            subjectInput.value = `Quote Request for ${productName}`;
+        }
+    }
+
+    async handleSubmit() {
         // Show loading state
-        const originalClass = heartIcon.className;
-        heartIcon.className = 'fa-solid fa-spinner fa-spin';
+        const originalText = this.submitBtn.innerHTML;
+        this.submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i> Sending...';
+        this.submitBtn.disabled = true;
 
-        // Get CSRF token
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        // Clear previous messages
+        this.clearMessages();
 
-        // Toggle wishlist via AJAX
-        fetch('{{ route("wishlist.toggle") }}', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': csrfToken,
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({
-                product_id: productId
-            })
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
+        try {
+            // Get form data
+            const formData = new FormData(this.form);
+            
+          
+            
+
+            // Add CSRF token
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            
+            // Use the form's action attribute
+            const actionUrl = this.form.getAttribute('action');
+            
+           
+
+            // Send AJAX request
+            const response = await fetch(actionUrl, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                }
+            });
+
+            const data = await response.json();
+            
             if (data.success) {
-                // Update icon
-                if (data.in_wishlist) {
-                    heartIcon.className = 'fa-solid fa-heart text-danger';
-                    button.setAttribute('data-bs-title', 'Remove from Wishlist');
-                    this.showToast('success', `${productTitle} added to wishlist`);
-                } else {
-                    heartIcon.className = 'fa-regular fa-heart';
-                    button.setAttribute('data-bs-title', 'Add to Wishlist');
-                    this.showToast('info', `${productTitle} removed from wishlist`);
-                }
-
-                // Update tooltip
-                this.updateTooltip(button);
-
-                // Update wishlist count
-                this.updateWishlistCount(data.wishlist_count);
+                this.showMessage(data.message, 'success');
+                this.form.reset();
+                
+                // Close modal after 3 seconds
+                setTimeout(() => {
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('quoteFormModal'));
+                    if (modal) {
+                        modal.hide();
+                    }
+                }, 3000);
             } else {
-                throw new Error(data.message || 'Failed to update wishlist');
-            }
-        })
-        .catch(error => {
-            console.error('Wishlist error:', error);
-            heartIcon.className = originalClass;
-            this.showToast('error', 'Failed to update wishlist');
-        });
-    }
-
-    updateWishlistCount(count) {
-        const wishlistCountElements = document.querySelectorAll('.wishlist-count');
-        wishlistCountElements.forEach(element => {
-            if (element) {
-                element.textContent = count;
-                if (count > 0) {
-                    element.style.display = 'inline';
-                } else {
-                    element.style.display = 'none';
+                let errorMessage = data.message || 'Something went wrong. Please try again.';
+                this.showMessage(errorMessage, 'error');
+                
+                // Show validation errors if they exist
+                if (data.errors) {
+                    this.showValidationErrors(data.errors);
                 }
             }
-        });
+        } catch (error) {
+            // console.error('Error submitting quote form:', error);
+            this.showMessage(
+                'Network error. Please check your connection and try again.', 
+                'error'
+            );
+        } finally {
+            // Reset button
+            this.submitBtn.innerHTML = originalText;
+            this.submitBtn.disabled = false;
+        }
     }
 
-    loadWishlistCount() {
-        fetch('{{ route("wishlist.data") }}', {
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'Accept': 'application/json'
-            }
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            this.updateWishlistCount(data.wishlist_count);
-        })
-        .catch(error => {
-            console.error('Error loading wishlist count:', error);
-        });
-    }
-
-    // Cart functionality
-    initializeCart() {
-        this.loadCartCount();
-    }
-
-    loadCartCount() {
-        fetch('{{ route("cart.data") }}', {
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'Accept': 'application/json'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            this.updateCartCount(data.cart_count);
-        })
-        .catch(error => {
-            console.error('Error loading cart count:', error);
-        });
-    }
-
-    updateCartCount(count) {
-        const cartCountElements = document.querySelectorAll('.cart-count');
-        cartCountElements.forEach(element => {
-            if (element) {
-                element.textContent = count;
-                if (count > 0) {
-                    element.style.display = 'inline';
-                } else {
-                    element.style.display = 'none';
-                }
-            }
-        });
-    }
-
-    // Toast notifications
-    showToast(type, message) {
-        // Your existing toast implementation
-        const toast = document.createElement('div');
-        toast.className = `toast align-items-center text-bg-${type} border-0`;
-        toast.innerHTML = `
-            <div class="d-flex">
-                <div class="toast-body">${message}</div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+    showMessage(message, type) {
+        this.clearMessages();
+        
+        const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+        const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+        
+        const messageHtml = `
+            <div class="alert ${alertClass} alert-dismissible fade show d-flex align-items-center" role="alert">
+                <i class="fa-solid ${icon} me-2"></i>
+                ${message}
+                <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         `;
-
-        let toastContainer = document.getElementById('toastContainer');
-        if (!toastContainer) {
-            toastContainer = document.createElement('div');
-            toastContainer.id = 'toastContainer';
-            toastContainer.className = 'toast-container position-fixed top-0 end-0 p-3';
-            document.body.appendChild(toastContainer);
-        }
-
-        toastContainer.appendChild(toast);
-        const bsToast = new bootstrap.Toast(toast);
-        bsToast.show();
-
-        toast.addEventListener('hidden.bs.toast', () => {
-            toast.remove();
-        });
+        
+        this.messagesDiv.innerHTML = messageHtml;
     }
 
-    // Update tooltip
-    updateTooltip(element) {
-        const tooltip = bootstrap.Tooltip.getInstance(element);
-        if (tooltip) {
-            tooltip.dispose();
+    showValidationErrors(errors) {
+        let errorHtml = '<div class="alert alert-danger"><strong>Please fix the following errors:</strong><ul class="mb-0 mt-2">';
+        
+        for (const field in errors) {
+            if (errors.hasOwnProperty(field)) {
+                errorHtml += `<li>${errors[field][0]}</li>`;
+            }
         }
-        new bootstrap.Tooltip(element);
+        
+        errorHtml += '</ul></div>';
+        this.messagesDiv.innerHTML = errorHtml;
     }
 
-    // Search functionality
-    initializeSearch() {
-        // Your search implementation
-        const searchTrigger = document.querySelector('.search-trigger');
-        const closeSearch = document.getElementById('closeSearch');
-        const searchbar = document.getElementById('searchbar');
-
-        if (searchTrigger && searchbar) {
-            searchTrigger.addEventListener('click', () => {
-                searchbar.style.display = 'block';
-            });
-        }
-
-        if (closeSearch && searchbar) {
-            closeSearch.addEventListener('click', () => {
-                searchbar.style.display = 'none';
-            });
-        }
-    }
-
-    initializeOtherFeatures() {
-        // Initialize other features like sliders, etc.
-        this.initializeSliders();
-    }
-
-    initializeSliders() {
-        // Your slick slider initialization
-        if (typeof $.fn.slick !== 'undefined') {
-            $('.common_slider').slick({
-                dots: false,
-                arrows: false,
-                infinite: true,
-                speed: 300,
-                slidesToShow: 1,
-                adaptiveHeight: true,
-                autoplay: true,
-                autoplaySpeed: 3000
-            });
-        }
+    clearMessages() {
+        this.messagesDiv.innerHTML = '';
     }
 }
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
-    window.customApp = new CustomApp();
+    // Initialize quote form
+    new QuoteForm();
 });
-
-// Make functions globally available for backward compatibility
-function updateWishlistCount(count) {
-    if (window.customApp) {
-        window.customApp.updateWishlistCount(count);
-    }
-}
-
-function fetchWishlistCount() {
-    if (window.customApp) {
-        window.customApp.loadWishlistCount();
-    }
-}
-
-function updateCartCount(count) {
-    if (window.customApp) {
-        window.customApp.updateCartCount(count);
-    }
-}
-
-function fetchCartCount() {
-    if (window.customApp) {
-        window.customApp.loadCartCount();
-    }
-}

@@ -131,52 +131,26 @@
                         <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Id commodi eaque voluptatibus illo, exercitationem minus natus, doloremque amet similique in dolore non quae pariatur dolorum laboriosam qui dolores nesciunt rem!</p>
                         <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aut illo maxime accusamus tempora veritatis dicta aperiam.</p>
                     </div> -->
-                    <form class="cart mb-3" action="{{ route('cart.add') }}" method="post" id="addToCartForm">
-                        @csrf
-                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                   
                         <div class="product-atc-group product-type-simple d-flex flex-wrap gap-3 align-items-end">
-                            @if(!is_null($product->stock_quantity) && $product->stock_quantity > 0 || is_null($product->stock_quantity))
-                            <!-- <div class="product-quantity">
-                                <div class="quantity__label em-font-semibold text-start">Quantity:</div>
-                                <div class="quantity">
-                                    <span class="icon--minus qty-button" type="button">
-                                        <svg aria-hidden="true" role="img" focusable="false" width="12" height="2" viewBox="0 0 12 2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M11.998 1.85689H6.85519H5.1409H-0.00195312V0.142604H5.1409L6.85519 0.142578L11.998 0.142604V1.85689Z"></path>
-                                        </svg>
-                                    </span>
-                                    <input type="number" id="quantity" class="input-text qty" name="quantity" value="1" min="1" max="{{ !is_null($product->stock_quantity) ? $product->stock_quantity : '' }}" step="1" placeholder="" inputmode="numeric" autocomplete="off">
-                                    <span class="icon--plus qty-button">
-                                        <svg aria-hidden="true" role="img" focusable="false" width="12" height="12" viewBox="0 0 12 12" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M11.998 6.85714H6.85519V12H5.1409V6.85714H-0.00195312V5.14286H5.1409V0H6.85519V5.14286H11.998V6.85714Z"></path>
-                                        </svg>
-                                    </span>
-                                </div>
-                            </div> -->
-                            <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Open modal for @mdo</button> -->
-                            <button type="submit" name="add-to-cart" class="single_add_to_cart_button btn btn-dark" id="addToCartBtn-" data-bs-toggle="modal" data-bs-target="#quoteFormModal" data-bs-whatever="@product-query">
+                         
+                        <button 
+                                type="button" 
+                                name="get_a_quote" 
+                                class="single_add_to_cart_button btn btn-dark" 
+                                id="quoteButton" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#quoteFormModal" 
+                                data-product-id="{{ $product->id }}"
+                                data-product-name="{{ $product->title }}"
+                                data-product-price="${{ number_format($product->sale_price ?? $product->regular_price, 2) }}"
+                                data-product-url="{{ route('product.show', $product->slug) }}"
+                                >
                                 <span class="btn-text">Get a Quote</span>
-
-                                <div class="spinner-border spinner-border-sm d-none" role="status">
-                                    <span class="visually-hidden">Loading...</span>
-                                </div>
                             </button>
-                            @else
-                            <button type="button" class="btn btn-secondary" disabled>Out of Stock</button>
-                            @endif
-                            <!-- <div class="product_wishlist_btn">
-                                <a href="#" class="wishlist-toggle"
-                                    data-bs-toggle="tooltip"
-                                    data-bs-placement="top"
-                                    data-bs-custom-class="custom-tooltip"
-                                    data-bs-title="Add to wishlist"
-                                    data-product-id="{{ $product->id }}"
-                                    data-product-title="{{ $product->title }}"
-                                    data-in-wishlist="{{ $product->isInWishlist ? 'true' : 'false' }}">
-                                    <i class="fa-regular fa-heart"></i>
-                                </a>
-                            </div> -->
+                           
                         </div>
-                    </form>
+                  
 
                     <div class="share_product mb-2 py-2">
                         <a href="#" class="d-inline-flex align-items-center gap-2">
@@ -230,7 +204,7 @@
                         <img src="{{ Storage::url($relatedProduct->featuredImage->file_path) }}" alt="{{ $product->title }}" class="img-fluid" />
                         @endif
                         <div class="cart_btn">
-                            <button class="cusbtn cartbtn">Add to cart</button>
+                            <button class="cusbtn cartbtn">View</button>
                         </div>
                     </a>
 
@@ -290,221 +264,10 @@
 <script src="{{ asset('assets/frontend/js/wishlist.js') }}"></script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Quantity buttons functionality
-        function initializeQuantityButtons() {
-            const quantityInput = document.getElementById('quantity');
-            const minusButton = document.querySelector('.icon--minus');
-            const plusButton = document.querySelector('.icon--plus');
-
-            if (!quantityInput || !minusButton || !plusButton) return;
-
-            function updateButtons() {
-                const currentValue = parseInt(quantityInput.value);
-                const minValue = parseInt(quantityInput.min) || 1;
-                const maxValue = parseInt(quantityInput.max) || Infinity;
-
-                // Update minus button state
-                minusButton.style.opacity = currentValue <= minValue ? '0.5' : '1';
-                minusButton.style.cursor = currentValue <= minValue ? 'not-allowed' : 'pointer';
-
-                // Update plus button state
-                plusButton.style.opacity = currentValue >= maxValue ? '0.5' : '1';
-                plusButton.style.cursor = currentValue >= maxValue ? 'not-allowed' : 'pointer';
-            }
-
-            // Minus button functionality
-            minusButton.addEventListener('click', function() {
-                let currentValue = parseInt(quantityInput.value);
-                const minValue = parseInt(quantityInput.min) || 1;
-
-                if (currentValue > minValue) {
-                    quantityInput.value = currentValue - 1;
-                    updateButtons();
-                }
-            });
-
-            // Plus button functionality
-            plusButton.addEventListener('click', function() {
-                let currentValue = parseInt(quantityInput.value);
-                const maxValue = parseInt(quantityInput.max) || Infinity;
-
-                if (currentValue < maxValue) {
-                    quantityInput.value = currentValue + 1;
-                    updateButtons();
-                }
-            });
-
-            // Input validation
-            quantityInput.addEventListener('change', function() {
-                let currentValue = parseInt(this.value);
-                const minValue = parseInt(this.min) || 1;
-                const maxValue = parseInt(this.max) || Infinity;
-
-                if (isNaN(currentValue) || currentValue < minValue) {
-                    this.value = minValue;
-                } else if (currentValue > maxValue) {
-                    this.value = maxValue;
-                }
-
-                updateButtons();
-            });
-
-            // Input event for real-time validation
-            quantityInput.addEventListener('input', function() {
-                this.value = this.value.replace(/[^0-9]/g, '');
-            });
-
-            // Initialize button states
-            updateButtons();
-        }
-
-        initializeQuantityButtons();
-
-        // Add to cart functionality
-        const addToCartForm = document.getElementById('addToCartForm');
-        if (addToCartForm) {
-            addToCartForm.addEventListener('submit', async function(e) {
-                e.preventDefault();
-
-                const submitBtn = document.getElementById('addToCartBtn');
-                const btnText = submitBtn.querySelector('.btn-text');
-                const spinner = submitBtn.querySelector('.spinner-border');
-                const quantityInput = document.getElementById('quantity');
-
-                // Show loading state
-                btnText.textContent = 'Adding...';
-                spinner.classList.remove('d-none');
-                submitBtn.disabled = true;
-
-                try {
-                    // Get CSRF token safely
-                    const csrfToken = document.querySelector('meta[name="csrf-token"]') ?
-                        document.querySelector('meta[name="csrf-token"]').getAttribute('content') :
-                        '{{ csrf_token() }}';
-
-                    // Submit form via AJAX
-                    const response = await fetch(this.action, {
-                        method: 'POST',
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest',
-                            'X-CSRF-TOKEN': csrfToken,
-                            'Accept': 'application/json'
-                        },
-                        body: new FormData(this)
-                    });
-
-                    const data = await response.json();
-
-                    if (!response.ok) {
-                        throw new Error(data.message || 'Server error');
-                    }
-
-                    if (data.success) {
-                        // Show success message with "View Cart" button
-                        showStaticToast('success', '{{ $product->title }} has been added to your cart.', true);
-
-                        // Update cart count in header
-                        updateCartCount(data.cart_count);
-
-                        // Reset form quantity
-                        if (quantityInput) {
-                            quantityInput.value = 1;
-                        }
-
-                        // Update button to show "View Cart"
-                        setTimeout(() => {
-                            btnText.textContent = 'View Cart';
-                            submitBtn.classList.remove('btn-dark');
-                            submitBtn.classList.add('btn-success');
-                            submitBtn.type = 'button';
-                            submitBtn.onclick = function() {
-                                window.location.href = '{{ route("cart.view") }}';
-                            };
-                            spinner.classList.add('d-none');
-                        }, 1000);
-
-                    } else {
-                        showStaticToast('error', data.message);
-                        // Reset button state on error
-                        btnText.textContent = 'Add to cart';
-                        spinner.classList.add('d-none');
-                        submitBtn.disabled = false;
-                    }
-
-                } catch (error) {
-                    console.error('Error:', error);
-                    let errorMessage = 'Something went wrong. Please try again.';
-
-                    if (error.message.includes('Server error')) {
-                        errorMessage = error.message;
-                    }
-
-                    showStaticToast('error', errorMessage);
-
-                    // Reset button state on error
-                    btnText.textContent = 'Add to cart';
-                    spinner.classList.add('d-none');
-                    submitBtn.disabled = false;
-                }
-            });
-        }
-    });
-
-
-    // Show/hide static toast function
-    function showStaticToast(type, message, showViewCart = false) {
-        const toastContainer = document.querySelector('.showToast');
-        const toastMessage = document.getElementById('toastMessage');
-        const toastElement = toastContainer.querySelector('.toast');
-
-        if (!toastContainer || !toastMessage) return;
-
-        // Update toast content
-        toastMessage.textContent = message;
-
-        // Update toast color based on type
-        toastElement.className = `toast align-items-center text-bg-${type === 'success' ? 'success' : 'danger'} border-0`;
-
-        // Show the toast container
-        toastContainer.classList.remove('d-none');
-
-        // Initialize and show Bootstrap toast
-        const bsToast = new bootstrap.Toast(toastElement, {
-            autohide: true,
-            delay: 50000
-        });
-        bsToast.show();
-
-        // Hide container when toast is hidden
-        toastElement.addEventListener('hidden.bs.toast', () => {
-            toastContainer.classList.add('d-none');
-        });
-    }
+    
 
 
 
-    // Load cart count on page load
-    document.addEventListener('DOMContentLoaded', function() {
-        fetch('{{ route("cart.data") }}', {
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Accept': 'application/json'
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                updateCartCount(data.cart_count);
-            })
-            .catch(error => {
-                console.error('Error loading cart count:', error);
-            });
-    });
 
     // Slider Pro initialization
     jQuery(document).ready(function($) {

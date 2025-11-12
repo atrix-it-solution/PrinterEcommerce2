@@ -149,6 +149,77 @@
              </div>
          </div>
      </div>
+
+
+     <div class="modal fade" id="quoteFormModal" tabindex="-1" aria-labelledby="quoteFrom" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="quoteFrom">Get a quote</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="quoteForm" action="{{ route('send.quote') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+
+                    <input type="hidden" id="product_id" name="product_id">
+                    <input type="hidden" id="product_name" name="product_name">
+                    <input type="hidden" id="product_price" name="product_price">
+                    <input type="hidden" id="product_url" name="product_url">
+                    
+                    <div class="row">
+                        <div class="col-md-6 my-2">
+                            <div class="form-floating">
+                                <input type="text" class="form-control rounded-0" id="name" name="name" placeholder="Full Name" required>
+                                <label for="name">Full Name</label>
+                                <div class="invalid-feedback">Please enter your full name.</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 my-2">
+                            <div class="form-floating">
+                                <input type="email" class="form-control rounded-0" id="email" name="email" placeholder="Email Address" required>
+                                <label for="email">Email address</label>
+                                <div class="invalid-feedback">Please enter a valid email address.</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 my-2">
+                            <div class="form-floating">
+                                <input type="tel" class="form-control rounded-0" id="phone" name="phone" placeholder="Enter Phone Number" required>
+                                <label for="phone">Phone Number</label>
+                                <div class="invalid-feedback">Please enter your phone number.</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 my-2">
+                            <div class="form-floating">
+                                <input type="text" class="form-control rounded-0" id="subject" name="subject" placeholder="Enter Subject" required>
+                                <label for="subject">Subject</label>
+                                <div class="invalid-feedback">Please enter a subject.</div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 my-3">
+                            <div class="form-floating">
+                                <textarea class="form-control rounded-0" placeholder="Leave a comment here" id="message" name="message" style="height: 100px" required></textarea>
+                                <label for="message">Message</label>
+                                <div class="invalid-feedback">Please enter your message.</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Success/Error Messages -->
+                        <div class="col-12">
+                            <div id="formMessages"></div>
+                        </div>
+                        
+                        <div class="submit_btn text-center pt-2">
+                            <button type="submit" class="btn btn-dark py-3 px-5 text-uppercase rounded-0" id="submitBtn">
+                                Send <i class="fa-solid fa-arrow-right ms-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
      <!--JS Files -->
        @yield('scripts')
      <script src="{{ asset('assets/frontend/js/font-awesome-all.min.js') }}"></script>
@@ -158,6 +229,55 @@
      <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
     <script type="text/javascript" src="https://cdn.rawgit.com/igorlino/elevatezoom-plus/1.1.6/src/jquery.ez-plus.js"></script>
      <script src="{{ asset('assets/frontend/js/custom.js') }}"></script>
+
+    
+    <script>
+
+        function updateWishlistCount(count) {
+            const wishlistCountElements = document.querySelectorAll('.wishlist-count');
+            wishlistCountElements.forEach(element => {
+                if (element) {
+                    element.textContent = count;
+                    if (count > 0) {
+                        element.style.display = 'inline';
+                    } else {
+                        element.style.display = 'none';
+                    }
+                }
+            });
+        }
+        // Function to fetch wishlist count from server
+        function fetchWishlistCount() {
+            fetch('{{ route("wishlist.data") }}', {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                updateWishlistCount(data.wishlist_count);
+            })
+            .catch(error => {
+                console.error('Error loading wishlist count:', error);
+            });
+        }
+
+        // Load both counts on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchWishlistCount();
+        });
+
+        // Make functions globally available
+       
+        window.updateWishlistCount = updateWishlistCount;
+        window.fetchWishlistCount = fetchWishlistCount;
+    </script>
 
 
  </body>

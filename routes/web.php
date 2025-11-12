@@ -23,6 +23,8 @@ use App\Http\Controllers\authentications\LoginRegisterController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\WishlistController;
 
+use App\Http\Controllers\QuoteController;
+
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product.show');
@@ -58,6 +60,9 @@ Route::post('/wishlist/check', [WishlistController::class, 'checkWishlist'])->na
 
 Route::get('/blog', [BlogController::class, 'frontendIndex'])->name('frontend.blog.index');
 Route::get('/blog/{slug}', [BlogController::class, 'frontendShow'])->name('frontend.blog.single');
+
+// Quote Routes
+Route::post('/send-quote', [QuoteController::class, 'sendQuote'])->name('send.quote');
 
 Route::get('/about', function () {
     return view('pages.frontend.about');
@@ -128,6 +133,7 @@ Route::get('/login', function () {
 Route::get('/register', function () {
     return redirect('/login-register');
 });
+
 // Dashboard Routes
 Route::middleware(['auth', 'admin'])->prefix('dashboard')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
