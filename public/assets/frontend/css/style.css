@@ -1,8 +1,8 @@
 @import url(fontface.css);
 :root {
-    --theme: #31694e;
+    --theme: #A30B37;
     --theme-dark: #393e46;
-    --theme-light: #93f859;
+    --theme-light: #2191FB;
     --dark: #222831;
     --subfont: "Edu NSW ACT Cursive", cursive;
     --headfont: "Lexend", sans-serif;

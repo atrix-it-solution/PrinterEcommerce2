@@ -402,6 +402,8 @@ class QuoteForm {
     }
 }
 
+// Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize quote form
     new QuoteForm();
 });

@@ -1,6 +1,6 @@
     <!-- Products will be loaded here via AJAX -->
 
-    <ul class="productlist column-lg-3 column-2">
+    <ul class="productlist column-3">
         @foreach($products as $product)
         <li>
             <div class="product_box">
