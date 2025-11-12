@@ -40,8 +40,8 @@
                                 <aside>
                                     <h4 class="widget-title">Quick link</h4>
                                     <ul class="menu">
-                                        <li><a href="/single-product">Single product</a></li>
-                                        <li><a href="/login-register">Login Register</a></li>
+                                        <!-- <li><a href="/single-product">Single product</a></li> -->
+                                        <!-- <li><a href="/login-register">Login Register</a></li> -->
                                         <li><a href="#">License Transfer Policy</a></li>
                                         <li><a href="#">Code Of Ethics And Conducts</a></li>
                                         <li><a href="#">Direct Seller Contract</a></li>
