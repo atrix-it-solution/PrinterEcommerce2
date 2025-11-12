@@ -18,7 +18,7 @@
                                 <aside>
                                     <h4 class="widget-title">Information</h4>
                                     <ul class="menu">
-                                        <li><a href="about">About us</a></li>
+                                        <li><a href="/about">About us</a></li>
                                         <li><a href="#">Careers</a></li>
                                         <li><a href="#">Delivery information</a></li>
                                         <li><a href="#">Privacy policy</a></li>
@@ -40,14 +40,12 @@
                                 <aside>
                                     <h4 class="widget-title">Quick link</h4>
                                     <ul class="menu">
-                                        <li><a href="/single-product">Single product</a></li>
-                                        <li><a href="/login-register">Login Register</a></li>
                                         <li><a href="#">License Transfer Policy</a></li>
                                         <li><a href="#">Code Of Ethics And Conducts</a></li>
                                         <li><a href="#">Direct Seller Contract</a></li>
                                         <li><a href="#">Return And Refund Policy</a></li>
-                                        <li><a href="terms-and-conditions">Terms And Conditions</a></li>
-                                        <li><a href="privacy-policy">Privacy Policy</a></li>
+                                        <li><a href="/terms-and-conditions">Terms And Conditions</a></li>
+                                        <li><a href="/privacy-policy">Privacy Policy</a></li>
                                         <li><a href="#">Unauthorized Distributor & False Information</a></li>
                                     </ul>
                                 </aside>
@@ -56,8 +54,8 @@
                                 <aside>
                                     <h4 class="widget-title">About us</h4>
                                     <ul class="menu">
-                                        <li><a href="blog">Blogs</a></li>
-                                        <li><a href="faq">Faq's</a></li>
+                                        <li><a href="/blog">Blogs</a></li>
+                                        <li><a href="/faq">Faq's</a></li>
                                         <li><a href="contact">Contact us</a></li>
                                         <li><a href="#">Testimonial</a></li>
                                         <li><a href="#">Newsletter</a></li>

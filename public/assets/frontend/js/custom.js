@@ -216,14 +216,13 @@ document.addEventListener('DOMContentLoaded', function() {
     logoutForms.forEach(form => {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-            if (confirm('Are you sure you want to logout?')) {
                 // Clear localStorage
                 localStorage.removeItem('auth_token');
                 localStorage.removeItem('user');
                 localStorage.removeItem('token_expires_at');
                 // Submit the form
                 this.submit();
-            }
+            
         });
     });
 });

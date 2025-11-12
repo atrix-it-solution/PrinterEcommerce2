@@ -87,7 +87,12 @@
                         <ul class="navbar-nav flex-row d-flex gap-2 gap-xxl-4 header_right_area">
                             <li class="d-none d-xl-block"><a href="javascript:void(0);" class="search-trigger" id="search" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Search"><i class="fa-solid fa-search"></i></a></li>
                             @auth
-                            <li><a href="/my-account" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="My Account"><i class="fa-regular fa-user"></i></a></li>
+                            <li data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Logout">
+                                <form method="POST" action="{{ route('logout') }}"  class="d-inline">
+                                    @csrf
+                                    <button type="submit" class="btn btn-link text-dark p-0 border-0 bg-transparent"><i class="fa-solid fa-right-from-bracket"></i></button>
+                                </form>
+                            </li>
                             @else
                             <li>
                                 <a href="{{ route('login.register') }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Login/Register">
@@ -99,21 +104,13 @@
                             <li class="me-1">
                                 <a href="{{ route('wishlist.view') }}" class="position-relative header-wishlist" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-custom-class="custom-tooltip" data-bs-title="Wishlist">
                                     <i class="fa-regular fa-heart"></i> 
-                                    <span class="count wishlist-count badge  position-absolute top-0 start-100 translate-middle" style="display: none; font-size: 0.7rem;">
+                                    <span class="count wishlist-count badge  position-absolute top-0 start-100 translate-middle" >
                                         0
                                     </span>
                                 </a>
                             </li>
 
-                            <li>
-                                 <a href="{{ route('cart.view') }}"   data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="custom-tooltip" data-bs-title="Cart">
-                                    <i class="fa fa-cart-shopping"></i> 
-                                     @php
-                                        $cartCount = session()->get('cart') ? array_sum(array_column(session()->get('cart'), 'quantity')) : 0;
-                                    @endphp
-                                    <span class="count cart-count-badge badge  " >{{ $cartCount }}</span>
-                                </a>
-                            </li>
+                           
                         </ul>
                     </div>
                 </div>
