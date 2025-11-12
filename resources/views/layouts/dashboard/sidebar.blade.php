@@ -92,13 +92,7 @@
             </div>
         </li>
 
-        <!-- Orders -->
-        <li class="nav-item">
-            <a class="nav-link {{ request()->routeIs('orders') ? 'active' : '' }}" href="{{ route('orders') }}">
-                <i class="bi bi-cart-check me-2"></i>
-                Orders
-            </a>
-        </li>
+        
 
         <!-- Settings -->
         <li class="nav-item">

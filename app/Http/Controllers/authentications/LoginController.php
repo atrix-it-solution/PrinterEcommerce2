@@ -36,7 +36,7 @@ class LoginController extends Controller
                 return redirect()->intended('/dashboard');
             }
 
-            return redirect()->intended('/my-account');
+            return redirect()->intended('/');
         }
 
         return back()->withErrors([

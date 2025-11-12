@@ -283,7 +283,6 @@ class QuoteForm {
         const productNameInput = document.getElementById('product_name');
         const productPriceInput = document.getElementById('product_price');
         const productUrlInput = document.getElementById('product_url');
-        const subjectInput = document.getElementById('subject');
         
         
         if (productIdInput) productIdInput.value = productId;
@@ -291,10 +290,7 @@ class QuoteForm {
         if (productPriceInput) productPriceInput.value = productPrice;
         if (productUrlInput) productUrlInput.value = productUrl;
         
-        // Auto-fill subject if product name is provided
-        if (subjectInput && productName && !subjectInput.value) {
-            subjectInput.value = `Quote Request for ${productName}`;
-        }
+        
     }
 
     async handleSubmit() {
@@ -407,3 +403,35 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize quote form
     new QuoteForm();
 });
+
+
+$(".cat_box_wrapper").slick({
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 2000,
+    arrows: true,
+    dots: false,
+    // ✅ Responsive settings
+    responsive: [
+        {
+            breakpoint: 1024, // tablet
+            settings: {
+                slidesToShow: 3,
+            },
+        },
+        {
+            breakpoint: 768, // small tablet
+            settings: {
+                slidesToShow: 2,
+            },
+        },
+        {
+            breakpoint: 576, // mobile
+            settings: {
+                slidesToShow: 1,
+            },
+        },
+    ],
+});
+ 
