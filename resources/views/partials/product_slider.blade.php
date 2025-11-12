@@ -2,25 +2,22 @@
  @foreach($products as $product)
 <div>
     <div class="product_box">
-        <div class="product_img">
-            <a href="{{ route('product.show', $product->slug) }}" >
+     
+            <a href="{{ route('product.show', $product->slug) }}" class="product_img">
                 @if($product->featuredImage)
                 <img src="{{ asset($product->featuredImage->url) }}" alt="{{ $product->title }}" class="img-fluid" />
                 <img src="{{ asset($product->featuredImage->url) }}" alt="{{ $product->title }}" class="img-fluid hover_img" />
             
                 @endif
+        
+                <div class="cart_btn">
+                    <button class="cusbtn cartbtn " >
+                            
+                        view
+                    </button>
+                </div>
             </a>
-            <div class="cart_btn">
-                <button class="cusbtn cartbtn add-to-cart" 
-                        data-product-id="{{ $product->id }}"
-                        data-product-title="{{ $product->title }}"
-                        data-product-price="{{ $product->sale_price ?? $product->regular_price }}"
-                        data-product-image="{{ $product->featuredImage->url ?? 'assets/frontend/images/placeholder.jpg' }}"
-                        data-product-slug="{{ $product->slug }}">
-                    Add to cart
-                </button>
-            </div>
-        </div>
+        
         <div class="product_meta">
             @if($product->sale_price && $product->regular_price)
             @php
