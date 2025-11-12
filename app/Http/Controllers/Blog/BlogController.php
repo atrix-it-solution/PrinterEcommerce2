@@ -87,4 +87,39 @@ class BlogController extends Controller
 
         return redirect()->route('blogs.index')->with('success', 'Blog deleted successfully!');
     }
+
+
+
+    /**
+     * Frontend blog listing page
+     */
+   public function frontendIndex()
+    {
+        $blogs = Blog::with(['categories', 'featuredImage'])
+                    ->orderBy('created_at', 'desc')
+                    ->paginate(6);
+
+        ($blogs); // This will show the data and stop execution
+        return view('pages.frontend.blog', compact('blogs'));
+    }
+
+    /**
+     * Frontend single blog page
+     */
+    public function frontendShow($slug)
+    {
+        $blog = Blog::with(['categories', 'featuredImage'])
+                    ->where('slug', $slug)
+                    ->firstOrFail();
+
+        // Get related blogs
+        $relatedBlogs = Blog::with(['categories', 'featuredImage'])
+                            ->where('id', '!=', $blog->id)
+                            ->whereHas('categories', function($query) use ($blog) {
+                                $query->whereIn('blog_categories.id', $blog->categories->pluck('id'));
+                            })
+                            ->get();
+
+        return view('pages.frontend.single-blog', compact('blog', 'relatedBlogs'));
+    }
 }

@@ -150,6 +150,7 @@
          </div>
      </div>
      <!--JS Files -->
+       @yield('scripts')
      <script src="{{ asset('assets/frontend/js/font-awesome-all.min.js') }}"></script>
      <script src="{{ asset('assets/frontend/js/popper.min.js') }}"></script>
      <script src="{{ asset('assets/frontend/js/bootstrap.min.js') }}"></script>

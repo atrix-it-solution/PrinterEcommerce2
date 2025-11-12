@@ -40,12 +40,6 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/shop', [ShopController::class, 'index'])->name('shop');
 
-// Protected routes - require authentication
-Route::middleware(['auth'])->group(function () {
-    Route::get('/my-account', [MyAccountController::class, 'index'])->name('my-account');
-    Route::get('/orders', [MyAccountController::class, 'orders'])->name('orders');
-});
-
 // Cart Routes
 Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
 Route::get('/cart', [CartController::class, 'viewCart'])->name('cart.view');
@@ -61,15 +55,14 @@ Route::get('/wishlist', [WishlistController::class, 'viewWishlist'])->name('wish
 Route::get('/wishlist/count', [WishlistController::class, 'getWishlistData'])->name('wishlist.data');
 Route::post('/wishlist/check', [WishlistController::class, 'checkWishlist'])->name('wishlist.check');
 
+
+Route::get('/blog', [BlogController::class, 'frontendIndex'])->name('frontend.blog.index');
+Route::get('/blog/{slug}', [BlogController::class, 'frontendShow'])->name('frontend.blog.single');
+
 Route::get('/about', function () {
     return view('pages.frontend.about');
 });
-Route::get('/blog', function () {
-    return view('pages.frontend.blog');
-});
-Route::get('/blog-details', function () {
-    return view('pages.frontend.blog-details');
-});
+
 Route::get('/portfolio', function () {
     return view('pages.frontend.portfolio');
 });
@@ -95,10 +88,6 @@ Route::get('terms-and-conditions', function () {
     return view('pages.frontend.terms-and-conditions');
 });
 
-
-Route::get('checkout', function () {
-    return view('pages.frontend.checkout');
-});
 Route::get('contact', function () {
     return view('pages.frontend.contact');
 });
@@ -115,16 +104,8 @@ Route::get('forgot-password', function () {
     return view('pages.frontend.forgot-password');
 });
 
-
-Route::get('orders', function () {
-    return view('pages.frontend.orders');
-});
 Route::get('privacy-policy', function () {
     return view('pages.frontend.privacy-policy');
-});
-
-Route::get('single-blog', function () {
-    return view('pages.frontend.single-blog');
 });
 Route::get('terms-and-conditions', function () {
     return view('pages.frontend.terms-and-conditions');
@@ -138,9 +119,6 @@ Route::get('billing-address', function () {
 });
 Route::get('shipping-address', function () {
     return view('pages.frontend.shipping-address');
-});
-Route::get('single-product', function () {
-    return view('pages.frontend.singleproduct');
 });
 
 Route::get('/login', function () {
@@ -157,7 +135,6 @@ Route::middleware(['auth', 'admin'])->prefix('dashboard')->group(function () {
     Route::resource('/products', ProductController::class);
     Route::resource('/blogcategories', BlogCategoryController::class);
     Route::resource('/blogs', BlogController::class);
-    Route::get('/orders', [DashboardController::class, 'orders'])->name('orders');
     
     // Settings Routes with more descriptive names
     Route::get('/settings', [SettingsController::class, 'index'])->name('dashboard.settings.index');
