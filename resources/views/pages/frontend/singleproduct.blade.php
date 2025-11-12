@@ -201,82 +201,15 @@
         <div class="vsipl_tabs pt-5">
             <div class="accordion" id="productTabs">
                 <div class="accordion-item">
-                    <h4 class="accordion-header accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#descriptionTab" aria-expanded="false" aria-controls="descriptionTab">Description</h4>
-                    <div id="descriptionTab" class="accordion-collapse collapse" data-bs-parent="#productTabs">
+                    <h4 class="accordion-header accordion-button " data-bs-toggle="collapse" data-bs-target="#descriptionTab" aria-expanded="true" aria-controls="descriptionTab">Description</h4>
+                    <div id="descriptionTab" class="accordion-collapse collapse show" data-bs-parent="#productTabs">
                         <div class="accordion-body">
                             {!! $product->description !!}
                         </div>
                     </div>
                 </div>
 
-                <div class="accordion-item">
-                    <h4 class="accordion-header accordion-button" data-bs-toggle="collapse" data-bs-target="#reviewTab" aria-expanded="true" aria-controls="reviewTab">Reviews</h4>
-                    <div id="reviewTab" class="accordion-collapse collapse show" data-bs-parent="#productTabs">
-                        <div class="accordion-body">
-                            <div id="reviews" class="d-flex flex-wrap gap-5">
-                                <div class="product_rating">
-                                    <h3>Customer Reviews</h3>
-                                    <p class="noreviews opacity-75">No reviews yet.</p>
-                                    <button class="form-review px-4 px-2 btn btn-outline-dark" type="button" data-bs-toggle="modal" data-bs-target="#review-form">Write a review</button>
-                                </div>
-                                <div id="comments">
-                                    <button class="form-review px-4 px-2 btn btn-outline-dark ms-auto d-none" type="button" data-bs-toggle="modal" data-bs-target="#review-form">Write a review</button>
-
-                                    <ol class="commentlist">
-                                        <li class="review">
-                                            <div class="comment_container">
-                                                <img alt="" src="{{asset ('assets/frontend/images/user.jpg')}}" class="avatar" height="60" width="60" />
-                                                <div class="comment-text">
-                                                    <div class="d-flex align-items-center gap-2">
-                                                        <div class="star-rating d-flex">
-                                                            <i class="fa-solid fa-star"></i>
-                                                            <i class="fa-solid fa-star"></i>
-                                                            <i class="fa-solid fa-star"></i>
-                                                            <i class="fa-solid fa-star opacity-25"></i>
-                                                            <i class="fa-solid fa-star opacity-25"></i>
-                                                        </div>
-                                                        <p class="meta">
-                                                            <strong class="review__author">aslogin </strong>
-                                                            <span class="review__dash">–</span>
-                                                            <time class="review__published-date">November 10, 2025</time>
-                                                        </p>
-                                                    </div>
-                                                    <div class="description">
-                                                        <p>swdqefc</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li class="review">
-                                            <div class="comment_container">
-                                                <img alt="" src="{{asset ('assets/frontend/images/user.jpg')}}" class="avatar" height="60" width="60" />
-                                                <div class="comment-text">
-                                                    <div class="d-flex align-items-center gap-2">
-                                                        <div class="star-rating d-flex">
-                                                            <i class="fa-solid fa-star"></i>
-                                                            <i class="fa-solid fa-star"></i>
-                                                            <i class="fa-solid fa-star"></i>
-                                                            <i class="fa-solid fa-star"></i>
-                                                            <i class="fa-solid fa-star"></i>
-                                                        </div>
-                                                        <p class="meta">
-                                                            <strong class="review__author">aslogin </strong>
-                                                            <span class="review__dash">–</span>
-                                                            <time class="review__published-date">November 10, 2025</time>
-                                                        </p>
-                                                    </div>
-                                                    <div class="description">
-                                                        <p>Be the first to review “HP OfficeJet Pro 9110b Wireless Printer with PDL Page Descriptive Language Suppo”</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ol>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                
             </div>
         </div>
     </div>

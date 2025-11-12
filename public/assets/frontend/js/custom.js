@@ -227,3 +227,277 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+
+// custom.js - Main functionality including wishlist
+class CustomApp {
+    constructor() {
+        this.init();
+    }
+
+    init() {
+        this.initializeWishlist();
+        this.initializeCart();
+        this.initializeSearch();
+        this.initializeOtherFeatures();
+    }
+
+    // Wishlist functionality
+    initializeWishlist() {
+        this.setupWishlistEventListeners();
+        this.loadWishlistCount();
+    }
+
+    setupWishlistEventListeners() {
+        // Event delegation for wishlist buttons
+        document.addEventListener('click', (e) => {
+            const wishlistBtn = e.target.closest('.wishlist-toggle, .wishlist-btn');
+            if (wishlistBtn) {
+                e.preventDefault();
+                this.handleWishlistToggle(wishlistBtn);
+            }
+        });
+    }
+
+    handleWishlistToggle(button) {
+        const productId = button.getAttribute('data-product-id');
+        const productTitle = button.getAttribute('data-product-title');
+        const heartIcon = button.querySelector('i');
+        
+        if (!productId) {
+            console.error('No product ID found for wishlist toggle');
+            return;
+        }
+
+        // Show loading state
+        const originalClass = heartIcon.className;
+        heartIcon.className = 'fa-solid fa-spinner fa-spin';
+
+        // Get CSRF token
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        // Toggle wishlist via AJAX
+        fetch('{{ route("wishlist.toggle") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken,
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                product_id: productId
+            })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                // Update icon
+                if (data.in_wishlist) {
+                    heartIcon.className = 'fa-solid fa-heart text-danger';
+                    button.setAttribute('data-bs-title', 'Remove from Wishlist');
+                    this.showToast('success', `${productTitle} added to wishlist`);
+                } else {
+                    heartIcon.className = 'fa-regular fa-heart';
+                    button.setAttribute('data-bs-title', 'Add to Wishlist');
+                    this.showToast('info', `${productTitle} removed from wishlist`);
+                }
+
+                // Update tooltip
+                this.updateTooltip(button);
+
+                // Update wishlist count
+                this.updateWishlistCount(data.wishlist_count);
+            } else {
+                throw new Error(data.message || 'Failed to update wishlist');
+            }
+        })
+        .catch(error => {
+            console.error('Wishlist error:', error);
+            heartIcon.className = originalClass;
+            this.showToast('error', 'Failed to update wishlist');
+        });
+    }
+
+    updateWishlistCount(count) {
+        const wishlistCountElements = document.querySelectorAll('.wishlist-count');
+        wishlistCountElements.forEach(element => {
+            if (element) {
+                element.textContent = count;
+                if (count > 0) {
+                    element.style.display = 'inline';
+                } else {
+                    element.style.display = 'none';
+                }
+            }
+        });
+    }
+
+    loadWishlistCount() {
+        fetch('{{ route("wishlist.data") }}', {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            this.updateWishlistCount(data.wishlist_count);
+        })
+        .catch(error => {
+            console.error('Error loading wishlist count:', error);
+        });
+    }
+
+    // Cart functionality
+    initializeCart() {
+        this.loadCartCount();
+    }
+
+    loadCartCount() {
+        fetch('{{ route("cart.data") }}', {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            this.updateCartCount(data.cart_count);
+        })
+        .catch(error => {
+            console.error('Error loading cart count:', error);
+        });
+    }
+
+    updateCartCount(count) {
+        const cartCountElements = document.querySelectorAll('.cart-count');
+        cartCountElements.forEach(element => {
+            if (element) {
+                element.textContent = count;
+                if (count > 0) {
+                    element.style.display = 'inline';
+                } else {
+                    element.style.display = 'none';
+                }
+            }
+        });
+    }
+
+    // Toast notifications
+    showToast(type, message) {
+        // Your existing toast implementation
+        const toast = document.createElement('div');
+        toast.className = `toast align-items-center text-bg-${type} border-0`;
+        toast.innerHTML = `
+            <div class="d-flex">
+                <div class="toast-body">${message}</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        `;
+
+        let toastContainer = document.getElementById('toastContainer');
+        if (!toastContainer) {
+            toastContainer = document.createElement('div');
+            toastContainer.id = 'toastContainer';
+            toastContainer.className = 'toast-container position-fixed top-0 end-0 p-3';
+            document.body.appendChild(toastContainer);
+        }
+
+        toastContainer.appendChild(toast);
+        const bsToast = new bootstrap.Toast(toast);
+        bsToast.show();
+
+        toast.addEventListener('hidden.bs.toast', () => {
+            toast.remove();
+        });
+    }
+
+    // Update tooltip
+    updateTooltip(element) {
+        const tooltip = bootstrap.Tooltip.getInstance(element);
+        if (tooltip) {
+            tooltip.dispose();
+        }
+        new bootstrap.Tooltip(element);
+    }
+
+    // Search functionality
+    initializeSearch() {
+        // Your search implementation
+        const searchTrigger = document.querySelector('.search-trigger');
+        const closeSearch = document.getElementById('closeSearch');
+        const searchbar = document.getElementById('searchbar');
+
+        if (searchTrigger && searchbar) {
+            searchTrigger.addEventListener('click', () => {
+                searchbar.style.display = 'block';
+            });
+        }
+
+        if (closeSearch && searchbar) {
+            closeSearch.addEventListener('click', () => {
+                searchbar.style.display = 'none';
+            });
+        }
+    }
+
+    initializeOtherFeatures() {
+        // Initialize other features like sliders, etc.
+        this.initializeSliders();
+    }
+
+    initializeSliders() {
+        // Your slick slider initialization
+        if (typeof $.fn.slick !== 'undefined') {
+            $('.common_slider').slick({
+                dots: false,
+                arrows: false,
+                infinite: true,
+                speed: 300,
+                slidesToShow: 1,
+                adaptiveHeight: true,
+                autoplay: true,
+                autoplaySpeed: 3000
+            });
+        }
+    }
+}
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    window.customApp = new CustomApp();
+});
+
+// Make functions globally available for backward compatibility
+function updateWishlistCount(count) {
+    if (window.customApp) {
+        window.customApp.updateWishlistCount(count);
+    }
+}
+
+function fetchWishlistCount() {
+    if (window.customApp) {
+        window.customApp.loadWishlistCount();
+    }
+}
+
+function updateCartCount(count) {
+    if (window.customApp) {
+        window.customApp.updateCartCount(count);
+    }
+}
+
+function fetchCartCount() {
+    if (window.customApp) {
+        window.customApp.loadCartCount();
+    }
+}
