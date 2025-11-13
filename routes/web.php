@@ -25,6 +25,8 @@ use App\Http\Controllers\WishlistController;
 
 use App\Http\Controllers\QuoteController;
 
+use App\Http\Controllers\SearchController;
+
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product.show');
@@ -56,6 +58,7 @@ Route::post('/wishlist/toggle', [WishlistController::class, 'toggleWishlist'])->
 Route::get('/wishlist', [WishlistController::class, 'viewWishlist'])->name('wishlist.view');
 Route::get('/wishlist/count', [WishlistController::class, 'getWishlistData'])->name('wishlist.data');
 Route::post('/wishlist/check', [WishlistController::class, 'checkWishlist'])->name('wishlist.check');
+Route::post('/wishlist/sync', [WishlistController::class, 'syncWishlist'])->name('wishlist.sync');
 
 
 Route::get('/blog', [BlogController::class, 'frontendIndex'])->name('frontend.blog.index');
@@ -63,6 +66,10 @@ Route::get('/blog/{slug}', [BlogController::class, 'frontendShow'])->name('front
 
 // Quote Routes
 Route::post('/send-quote', [QuoteController::class, 'sendQuote'])->name('send.quote');
+
+// Search routes
+Route::get('/search', [SearchController::class, 'search'])->name('search');
+Route::get('/search-results', [SearchController::class, 'searchResults'])->name('search.results');
 
 Route::get('/about', function () {
     return view('pages.frontend.about');

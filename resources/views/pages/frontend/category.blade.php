@@ -1,6 +1,6 @@
 @extends('layouts.frontend.master')
 
-@section('title', 'Category')
+@section('title',$category->title . ' - Category')
 
 @section('content')
         <div class="bodyWrapper flex-grow-1">

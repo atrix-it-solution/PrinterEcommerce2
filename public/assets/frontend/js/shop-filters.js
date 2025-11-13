@@ -148,7 +148,7 @@ class ShopFilters {
             fetchUrl = `/shop?${queryString.toString()}`;
         }
 
-        console.log('Fetching URL:', fetchUrl);
+        // console.log('Fetching URL:', fetchUrl);
 
         fetch(fetchUrl, {
             headers: {
@@ -182,74 +182,81 @@ class ShopFilters {
     }
 
     updateProducts(products) {
-        const container = document.getElementById('productsContainer');
-        
-        if (!products || products.length === 0) {
-            container.innerHTML = `
-                <div class="text-center py-5">
-                    <p class="text-muted">No products found matching your criteria.</p>
-                    <a href="/shop" class="btn btn-primary">Clear Filters</a>
-                </div>
-            `;
-            return;
-        }
+    const container = document.getElementById('productsContainer');
+    
+    if (!products || products.length === 0) {
+        container.innerHTML = `
+            <div class="text-center py-5">
+                <p class="text-muted">No products found matching your criteria.</p>
+                <a href="/shop" class="btn btn-primary">Clear Filters</a>
+            </div>
+        `;
+        return;
+    }
 
-        let productsHTML = '<ul class="productlist column-3">';
+    let productsHTML = '<ul class="productlist column-3">';
+    
+    products.forEach(product => {
+        const discount = product.discount || 0;
         
-        products.forEach(product => {
-            const discount = product.discount || 0;
-            
-            productsHTML += `
-                <li>
-                    <div class="product_box">
-                        <a href="${product.url}" class="product_img">
-                            <img src="${product.image}" alt="${product.title}" class="img-fluid" />
-                            <img src="${product.image}" alt="${product.title}" class="img-fluid hover_img" />
-                            <div class="cart_btn">
-                                <button class="cusbtn cartbtn">View</button>
-                            </div>
-                        </a>
-                    
-                        <div class="product_meta">
-                            ${discount > 0 ? `<div class="discount_percent">-${discount}%</div>` : ''}
-                            <div class="wishlist">
-                                <span class="wishlist-toggle wishlist-btn" 
-                                    data-bs-toggle="tooltip" 
-                                    data-bs-placement="top" 
-                                    data-bs-custom-class="custom-tooltip" 
-                                    data-bs-title="Add to Wishlist"
-                                    data-product-id="${product.id}"
-                                    data-product-title="${product.title}">
-                                    <i class="fa-regular fa-heart"></i>
-                                </span>
-                            </div>
+        productsHTML += `
+            <li>
+                <div class="product_box">
+                    <a href="${product.url}" class="product_img">
+                        <img src="${product.image}" alt="${product.title}" class="img-fluid" />
+                        <img src="${product.image}" alt="${product.title}" class="img-fluid hover_img" />
+                        <div class="cart_btn">
+                            <button class="cusbtn cartbtn">View</button>
                         </div>
-                        <div class="product_content">
-                            <h4><a href="${product.url}">${product.title}</a></h4>
-                            <div class="price">
-                                ${product.sale_price ? 
-                                    `<del>₹${product.regular_price}</del><ins>₹${product.sale_price}</ins>` : 
-                                    `<ins>₹${product.regular_price}</ins>`
-                                }
-                            </div>
-                            <div class="rating">
-                                <span class="fa-solid fa-star"></span>
-                                <span class="fa-solid fa-star"></span>
-                                <span class="fa-solid fa-star"></span>
-                                <span class="fa-solid fa-star"></span>
-                                <span class="fa-regular fa-star"></span>
-                            </div>
+                    </a>
+                
+                    <div class="product_meta">
+                        ${discount > 0 ? `<div class="discount_percent">-${discount}%</div>` : ''}
+                        <div class="wishlist">
+                            <span class="wishlist-toggle wishlist-btn" 
+                                data-bs-toggle="tooltip" 
+                                data-bs-placement="top" 
+                                data-bs-custom-class="custom-tooltip" 
+                                data-bs-title="Add to Wishlist"
+                                data-product-id="${product.id}"
+                                data-product-title="${product.title}">
+                                <i class="fa-regular fa-heart"></i>
+                            </span>
                         </div>
                     </div>
-                </li>
-            `;
-        });
-        
-        productsHTML += '</ul>';
-        container.innerHTML = productsHTML;
-        
-        this.initializeTooltips();
+                    <div class="product_content">
+                        <h4><a href="${product.url}">${product.title}</a></h4>
+                        <div class="price">
+                            ${product.sale_price ? 
+                                `<del>₹${product.regular_price}</del><ins>₹${product.sale_price}</ins>` : 
+                                `<ins>₹${product.regular_price}</ins>`
+                            }
+                        </div>
+                        <div class="rating">
+                            <span class="fa-solid fa-star"></span>
+                            <span class="fa-solid fa-star"></span>
+                            <span class="fa-solid fa-star"></span>
+                            <span class="fa-solid fa-star"></span>
+                            <span class="fa-regular fa-star"></span>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        `;
+    });
+    
+    productsHTML += '</ul>';
+    container.innerHTML = productsHTML;
+    
+    this.initializeTooltips();
+    
+    // Use global wishlist manager to refresh icons
+    if (window.wishlistManager) {
+        setTimeout(() => {
+            window.wishlistManager.refreshAllIcons();
+        }, 100);
     }
+}
 
     updatePagination(pagination) {
         const container = document.getElementById('productsContainer');

@@ -12,15 +12,15 @@
       
         .image-container {
             position: relative;
-            margin-bottom: 1rem;
             border-radius: 8px;
             overflow: hidden;
             transition: all 0.3s ease;
             cursor: pointer;
+            border: 1px solid #ddd;
         }
         .image-container img {
             width: 100%;
-            height: 150px;
+            height: 130px;
             object-fit: cover;
             border: 5px solid transparent;
             transition: all 0.3s ease;
@@ -147,7 +147,13 @@
             display: none;
         }
         
-    
+        @media (min-width: 1200px) {
+            .modal-xl
+        
+        {
+                --bs-modal-width: 1525px !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -166,7 +172,7 @@
 
         <!-- Bootstrap Modal -->
         <div class="modal fade" id="uploadImageModal" tabindex="-1" aria-labelledby="uploadImageModalLabel" aria-hidden="true" data-bs-backdrop="static" >
-            <div class="modal-dialog modal-xl">
+            <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="uploadImageModalLabel"><i class="fas fa-image me-2"></i> Image</h5>
