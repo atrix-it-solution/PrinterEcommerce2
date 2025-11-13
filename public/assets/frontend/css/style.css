@@ -4,6 +4,7 @@
     --theme-dark: #393e46;
     --theme-light: #2191FB;
     --dark: #222831;
+    --golden: #F6B009;
     --subfont: "Edu NSW ACT Cursive", cursive;
     --headfont: "Lexend", sans-serif;
     --bodyfont: "Outfit", sans-serif;
@@ -430,7 +431,7 @@ header nav ul > li.nav-item .nav-link.active {
     display: flex;
     font-size: 13px;
     padding-top: 5px;
-    color: var(--theme-light);
+    color: var(--golden);
 }
 .product_slider .slick-arrow.slick-prev {
     left: -40px;
@@ -535,7 +536,7 @@ header nav ul > li.nav-item .nav-link.active {
 }
 .contentbox .nav-link.active,
 .contentbox .nav-link:hover a {
-    color: var(--theme-light);
+    color: var(--theme);
 }
 .img_box img {
     display: block;
@@ -652,7 +653,7 @@ header nav ul > li.nav-item .nav-link.active {
     display: flex;
     padding-top: 5px;
     padding-bottom: 5px;
-    color: var(--theme);
+    color: var(--golden);
 }
 .review_box .review_img img {
     height: 100%;
