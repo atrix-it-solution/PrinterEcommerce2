@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product\Product;
 use App\Models\Product\ProductCategory;
+use App\Models\Wishlist; // Add this import
+use Illuminate\Support\Facades\Auth;
 
 class ShopController extends Controller
 {
@@ -14,7 +16,7 @@ class ShopController extends Controller
         \Log::info('ShopController accessed', ['request' => $request->all()]);
 
         try {
-            // Get categories for filter sidebar - REMOVED STATUS CHECK
+            // Get categories for filter sidebar
             $categories = ProductCategory::withCount(['products'])->get();
 
             // Get filtered products
@@ -32,10 +34,10 @@ class ShopController extends Controller
             // For AJAX requests (filtering/sorting)
             if ($request->ajax()) {
                 return response()->json([
+                    'success' => true,
                     'products' => $this->formatProducts($products->items()),
                     'pagination' => $this->formatPagination($products),
-                    'total_products' => $products->total(),
-                    'success' => true
+                    'total_products' => $products->total()
                 ]);
             }
 
@@ -46,20 +48,22 @@ class ShopController extends Controller
             ));
 
         } catch (\Exception $e) {
-            \Log::error('ShopController error: ' . $e->getMessage());
+            \Log::error('ShopController error: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString()
+            ]);
 
             // Return error response for AJAX
             if ($request->ajax()) {
                 return response()->json([
-                    'error' => 'Failed to load products: ' . $e->getMessage(),
-                    'success' => false
+                    'success' => false,
+                    'error' => 'Failed to load products: ' . $e->getMessage()
                 ], 500);
             }
 
-            // Return error view for normal requests - REMOVED STATUS CHECK
+            // Return error view for normal requests
             return view('pages.frontend.shop', [
                 'products' => Product::paginate(6),
-                'categories' => ProductCategory::all(), // Removed status filter
+                'categories' => ProductCategory::all(),
                 'saleProductsCount' => 0,
                 'inStockCount' => 0,
                 'outOfStockCount' => 0,
@@ -76,28 +80,39 @@ class ShopController extends Controller
 
         // === CATEGORY FILTER ===
         if ($request->has('category') && !empty($request->category)) {
-            $query->whereHas('categories', function($q) use ($request) {
-                $q->whereIn('product_categories.id', $request->category);
+            $categoryIds = is_array($request->category) ? $request->category : [$request->category];
+            $query->whereHas('categories', function($q) use ($categoryIds) {
+                $q->whereIn('product_categories.id', $categoryIds);
             });
-            \Log::info('Applied category filter', ['categories' => $request->category]);
+            \Log::info('Applied category filter', ['categories' => $categoryIds]);
         }
 
         // === AVAILABILITY FILTER ===
         if ($request->has('availability') && !empty($request->availability)) {
-            if (in_array('sale', $request->availability)) {
-                $query->whereNotNull('sale_price')->where('sale_price', '>', 0);
-            }
+            $availabilities = is_array($request->availability) ? $request->availability : [$request->availability];
             
-            if (in_array('instock', $request->availability)) {
-                $query->where(function($q) {
-                    $q->where('stock_quantity', '>', 0)->orWhereNull('stock_quantity');
-                });
-            }
-            
-            if (in_array('outstock', $request->availability)) {
-                $query->where('stock_quantity', 0);
-            }
-            \Log::info('Applied availability filter', ['availability' => $request->availability]);
+            $query->where(function($q) use ($availabilities) {
+                foreach ($availabilities as $availability) {
+                    switch ($availability) {
+                        case 'sale':
+                            $q->orWhere(function($q2) {
+                                $q2->whereNotNull('sale_price')
+                                   ->where('sale_price', '>', 0);
+                            });
+                            break;
+                        case 'instock':
+                            $q->orWhere(function($q2) {
+                                $q2->where('stock_quantity', '>', 0)
+                                   ->orWhereNull('stock_quantity');
+                            });
+                            break;
+                        case 'outstock':
+                            $q->orWhere('stock_quantity', 0);
+                            break;
+                    }
+                }
+            });
+            \Log::info('Applied availability filter', ['availability' => $availabilities]);
         }
 
         // === PRICE FILTER ===
@@ -106,7 +121,9 @@ class ShopController extends Controller
         
         if ($minPrice > 0 || $maxPrice < 10000) {
             $query->where(function($q) use ($minPrice, $maxPrice) {
+                // Check regular price
                 $q->whereBetween('regular_price', [$minPrice, $maxPrice])
+                  // Or check sale price if exists
                   ->orWhere(function($q2) use ($minPrice, $maxPrice) {
                       $q2->whereNotNull('sale_price')
                          ->where('sale_price', '>', 0)
@@ -127,10 +144,10 @@ class ShopController extends Controller
                 $query->orderBy('title', 'desc');
                 break;
             case 'price_asc':
-                $query->orderBy('regular_price', 'asc');
+                $query->orderByRaw('COALESCE(sale_price, regular_price) ASC');
                 break;
             case 'price_desc':
-                $query->orderBy('regular_price', 'desc');
+                $query->orderByRaw('COALESCE(sale_price, regular_price) DESC');
                 break;
             default:
                 $query->orderBy('created_at', 'desc');
@@ -139,21 +156,8 @@ class ShopController extends Controller
 
         \Log::info('Final query before pagination', ['sort' => $sortBy]);
 
-        // Get user's wishlist product IDs
-        $wishlistProductIds = [];
-        if (auth()->check()) {
-            $wishlistProductIds = auth()->user()->wishlist()->pluck('product_id')->toArray();
-        }
-
-        // Transform products to include wishlist status
-        $products = $query->paginate(6)->withQueryString();
-        
-        $products->getCollection()->transform(function ($product) use ($wishlistProductIds) {
-            $product->in_wishlist = in_array($product->id, $wishlistProductIds);
-            return $product;
-        });
-
-        return $products;
+        // Paginate results
+        return $query->paginate(6)->withQueryString();
     }
 
     private function getProductCounts()
@@ -174,16 +178,17 @@ class ShopController extends Controller
 {
     // Get user's wishlist product IDs for AJAX requests
     $wishlistProductIds = [];
-    if (auth()->check()) {
-        $wishlistProductIds = auth()->user()->wishlist()->pluck('product_id')->toArray();
+    if (Auth::check()) {
+        $wishlistProductIds = Wishlist::where('user_id', Auth::id())
+            ->pluck('product_id')
+            ->toArray();
     }
 
     \Log::info('Wishlist Product IDs:', $wishlistProductIds);
-    \Log::info('Products to format:', ['count' => count($products)]);
 
     return collect($products)->map(function($product) use ($wishlistProductIds) {
         // Calculate discount percentage
-        $discount = null;
+        $discount = 0;
         if ($product->sale_price && 
             $product->regular_price && 
             $product->sale_price < $product->regular_price) {
@@ -191,19 +196,17 @@ class ShopController extends Controller
         }
 
         // Get image URL with fallback
-        $imageUrl = $product->featuredImage 
+        $imageUrl = $product->featuredImage && $product->featuredImage->url
             ? asset($product->featuredImage->url)
             : asset('assets/frontend/images/placeholder.jpg');
 
-        // Check if product is in wishlist - USE THE TRANSFORMED DATA
-        // The product should have in_wishlist property from getFilteredProducts method
-        $inWishlist = $product->in_wishlist ?? in_array($product->id, $wishlistProductIds);
+        // Check if product is in wishlist
+        $inWishlist = in_array($product->id, $wishlistProductIds);
 
-        \Log::info("Product {$product->id} wishlist status:", [
-            'product_id' => $product->id,
-            'in_wishlist_property' => $product->in_wishlist ?? 'not_set',
-            'in_array_result' => in_array($product->id, $wishlistProductIds),
-            'final_status' => $inWishlist
+        \Log::info("Product {$product->id} processed", [
+            'title' => $product->title,
+            'in_wishlist' => $inWishlist,
+            'wishlist_ids' => $wishlistProductIds
         ]);
 
         return [
@@ -216,7 +219,7 @@ class ShopController extends Controller
             'discount' => $discount,
             'url' => route('product.show', $product->slug),
             'in_stock' => $product->stock_quantity > 0 || is_null($product->stock_quantity),
-            'in_wishlist' => $inWishlist 
+            'in_wishlist' => $inWishlist // Make sure this is included
         ];
     })->toArray();
 }

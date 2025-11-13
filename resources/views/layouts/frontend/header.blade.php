@@ -104,9 +104,9 @@
                             <li class="me-1">
                                 <a href="{{ route('wishlist.view') }}" class="position-relative header-wishlist" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-custom-class="custom-tooltip" data-bs-title="Wishlist">
                                     <i class="fa-regular fa-heart"></i> 
-                                    <span class="count wishlist-count badge  position-absolute top-0 start-100 translate-middle" >
-                                        0
-                                    </span>
+                                    <span class="count wishlist-count badge  position-absolute top-0 start-100 translate-middle ">
+                                    {{ $wishlistCount ?? 0 }}
+                                </span>
                                 </a>
                             </li>
 

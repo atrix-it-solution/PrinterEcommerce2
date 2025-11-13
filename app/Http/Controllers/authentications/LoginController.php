@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\authentications;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\WishlistController; // Add this import
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -22,21 +23,21 @@ class LoginController extends Controller
         $credentials = $request->only('email', 'password');
         $remember = $request->has('remember');
 
-       
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
 
-            // Clear any existing Sanctum tokens for frontend users
+            // Sync session wishlist to database after successful login
+            $this->syncWishlistAfterLogin();
+
             if (Auth::user()->role === 'customer') {
-                Auth::user()->tokens()->delete();
+                $this->revokeUserTokens(Auth::user());
+                return redirect()->intended('/');
             }
 
             // Redirect based on user role
             if (Auth::user()->isAdmin()) {
                 return redirect()->intended('/dashboard');
             }
-
-            return redirect()->intended('/');
         }
 
         return back()->withErrors([
@@ -44,7 +45,55 @@ class LoginController extends Controller
         ])->withInput($request->except('password'));
     }
 
-     public function logout(Request $request)
+    /**
+     * Sync session wishlist to database after login
+     */
+    private function syncWishlistAfterLogin()
+    {
+        try {
+            // Check if there are any items in session wishlist
+            $sessionWishlist = session()->get('wishlist', []);
+            
+            if (!empty($sessionWishlist) && Auth::check()) {
+                $wishlistController = new WishlistController();
+                
+                // Use reflection to call the protected method, or make it public
+                // Option 1: If you make syncWishlist public in WishlistController
+                $wishlistController->syncWishlist();
+                
+                // Option 2: Alternative direct implementation
+                // $this->syncWishlistToDatabase($sessionWishlist);
+            }
+        } catch (\Exception $e) {
+            \Log::error('Wishlist sync error during login: ' . $e->getMessage());
+            // Don't break the login process if wishlist sync fails
+        }
+    }
+
+    /**
+     * Alternative direct implementation of wishlist sync
+     */
+    private function syncWishlistToDatabase($sessionWishlist)
+    {
+        foreach ($sessionWishlist as $productId => $item) {
+            // Check if already exists in database
+            $exists = \App\Models\Wishlist::where('user_id', Auth::id())
+                        ->where('product_id', $productId)
+                        ->exists();
+
+            if (!$exists) {
+                \App\Models\Wishlist::create([
+                    'user_id' => Auth::id(),
+                    'product_id' => $productId
+                ]);
+            }
+        }
+
+        // Clear session wishlist after syncing
+        session()->forget('wishlist');
+    }
+
+    public function logout(Request $request)
     {
         // Safely revoke Sanctum tokens if any
         if (Auth::check()) {

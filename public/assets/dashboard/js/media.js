@@ -476,7 +476,7 @@ function renderImageGallery() {
     
     window.images.forEach(image => {
         const col = document.createElement('div');
-        col.classList.add('col-md-3', 'mb-3');
+        col.classList.add('col-md-2', 'mb-3');
         
         col.innerHTML = `
             <div class="image-container" data-id="${image.id}" 

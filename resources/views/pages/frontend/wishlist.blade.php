@@ -31,13 +31,9 @@
                             <img src="{{ asset($item['image']) }}" alt="{{ $item['title'] }}" class="img-fluid" />
                             <img src="{{ asset($item['image']) }}" alt="{{ $item['title'] }}" class="img-fluid hover_img" />
                             <div class="cart_btn">
-                                <button class="cusbtn cartbtn add-to-cart-from-wishlist" 
-                                        data-product-id="{{ $item['product_id'] }}"
-                                        data-product-title="{{ $item['title'] }}"
-                                        data-product-price="{{ $item['price'] }}"
-                                        data-product-image="{{ $item['image'] }}"
-                                        data-product-slug="{{ $item['slug'] }}">
-                                    Add to cart
+                                <button class="cusbtn cartbtn "> 
+                                       
+                                    view
                                 </button>
                             </div>
                         </a>
@@ -175,7 +171,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Add to cart from wishlist
+    // view from wishlist
     document.querySelectorAll('.add-to-cart-from-wishlist').forEach(button => {
         button.addEventListener('click', function(e) {
             e.preventDefault();
