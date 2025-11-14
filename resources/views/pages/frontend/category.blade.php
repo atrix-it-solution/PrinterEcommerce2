@@ -24,7 +24,7 @@
                             <div class="filter pb-4">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5 class="fw-normal">Filter</h5>
-                                    <a href="javascript:void(0);" class="clearAll small text-decoration-underline">Clear all</a>
+                                    <a href="javascript:void(0);" id="clearAllFilters" class="clearAll small text-decoration-underline">Clear all</a>
                                 </div>
 
                                 <div class="selected_items pt-1">
@@ -154,4 +154,77 @@
 
 @section('scripts')
 <script src="{{ asset('assets/frontend/js/shop-filters.js') }}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Clear All Filters functionality
+    const clearAllBtn = document.getElementById('clearAllFilters');
+    
+    if (clearAllBtn) {
+        clearAllBtn.addEventListener('click', function() {
+            clearAllFilters();
+        });
+    }
+
+    function clearAllFilters() {
+        console.log('Clearing all filters...');
+        
+        // Uncheck all availability checkboxes
+        const checkboxes = document.querySelectorAll('.filter-checkbox');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = false;
+        });
+
+        // Reset price inputs to default values
+        const minPriceInput = document.getElementById('min_price');
+        const maxPriceInput = document.getElementById('max_price');
+        if (minPriceInput) minPriceInput.value = 0;
+        if (maxPriceInput) maxPriceInput.value = 10000;
+
+        // Reset sort dropdown to default
+        const sortSelect = document.getElementById('sort_by');
+        if (sortSelect) sortSelect.value = 'created_at';
+
+        // Clear selected filters display
+        const selectedFiltersContainer = document.getElementById('selectedFilters');
+        if (selectedFiltersContainer) {
+            selectedFiltersContainer.innerHTML = '';
+        }
+
+        // Reload products with cleared filters
+        loadProducts();
+    }
+
+    // Function to load products (assuming you have this in shop-filters.js)
+    function loadProducts() {
+        // Show loading spinner
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const productsContainer = document.getElementById('productsContainer');
+        
+        if (loadingSpinner) loadingSpinner.classList.remove('d-none');
+        if (productsContainer) productsContainer.classList.add('d-none');
+
+        // Get current URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        // Remove all filter parameters
+        const paramsToRemove = ['availability', 'min_price', 'max_price', 'sort_by', 'category'];
+        paramsToRemove.forEach(param => {
+            urlParams.delete(param);
+        });
+
+        // Keep only the essential parameters (like page if needed)
+        const newParams = urlParams.toString();
+        const newUrl = newParams ? `${window.location.pathname}?${newParams}` : window.location.pathname;
+
+        // Use AJAX to load products or redirect
+        if (typeof window.applyFilters === 'function') {
+            // If you have an applyFilters function in shop-filters.js
+            window.applyFilters();
+        } else {
+            // Redirect to clean URL
+            window.location.href = newUrl;
+        }
+    }
+});
+</script>
 @endsection

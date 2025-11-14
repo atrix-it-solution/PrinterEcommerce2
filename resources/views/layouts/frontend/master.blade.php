@@ -19,6 +19,7 @@
 
      <!-- JS (jquery) -->
      <script src="{{ asset('assets/frontend/js/jquery.min.js') }}"></script>
+     {!! CookieConsent::styles() !!}
 
  </head>
 
@@ -41,6 +42,7 @@
          {{-- Footer --}}
          @include('layouts.frontend.footer')
 
+         {!! CookieConsent::scripts() !!}
        
      </main>
 

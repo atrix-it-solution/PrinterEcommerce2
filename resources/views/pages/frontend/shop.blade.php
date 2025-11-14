@@ -25,7 +25,7 @@
                         <div class="filter pb-4">
                             <div class="d-flex justify-content-between align-items-center">
                                 <h5 class="fw-normal">Filter</h5>
-                                <a href="javascript:void(0);" id="clearAll" class="clearAll small text-decoration-underline">Clear all</a>
+                                <a href="/shop" id="clearAll" class="clearAll small text-decoration-underline">Clear all</a>
                                 
                             </div>
 

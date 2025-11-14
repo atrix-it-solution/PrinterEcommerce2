@@ -11,9 +11,33 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $products = Product::with(['categories', 'featuredImage'])->get();
-        $categories = ProductCategory::with('categoryImage') ->withCount('products')->get();
-        return view('pages.frontend.home', compact('products', 'categories'));
+        // For trending products section (using latest products)
+        $products = Product::with(['categories', 'featuredImage'])
+            ->inRandomOrder()
+            ->limit(12) // Adjust limit as needed
+            ->get();
+
+        // For featured products section
+        $featuredProducts = Product::with(['categories', 'featuredImage'])
+            ->limit(8)
+            ->get();
+
+        // For latest products section (if needed separately)
+        $products = Product::with(['featuredImage'])
+            ->inRandomOrder()
+            ->limit(8)
+            ->get();
+
+        $categories = ProductCategory::with('categoryImage')
+            ->withCount('products')
+            ->having('products_count', '>', 0)
+            ->limit(10)
+            ->get();
+
+        return view('pages.frontend.home', compact('products', 'featuredProducts', 'products', 'categories'));
+        // $products = Product::with(['categories', 'featuredImage'])->get();
+        // $categories = ProductCategory::with('categoryImage') ->withCount('products')->get();
+        // return view('pages.frontend.home', compact('products', 'categories'));
     }
    
 }

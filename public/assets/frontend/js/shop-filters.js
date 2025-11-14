@@ -194,13 +194,13 @@ class ShopFilters {
         return;
     }
 
-    let productsHTML = '<ul class="productlist column-3">';
+    let productsHTML = '<div class="productlist row gy-4">';
     
     products.forEach(product => {
         const discount = product.discount || 0;
         
         productsHTML += `
-            <li>
+            <div class="col-lg-4 col-6">
                 <div class="product_box">
                     <a href="${product.url}" class="product_img">
                         <img src="${product.image}" alt="${product.title}" class="img-fluid" />
@@ -241,11 +241,11 @@ class ShopFilters {
                         </div>
                     </div>
                 </div>
-            </li>
+            </div>
         `;
     });
     
-    productsHTML += '</ul>';
+    productsHTML += '</div>';
     container.innerHTML = productsHTML;
     
     this.initializeTooltips();
