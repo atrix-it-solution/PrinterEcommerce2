@@ -55,4 +55,15 @@ class Product extends Model
         });
     }
 
+    // ADD THIS METHOD - Check if featured image exists
+    public function hasFeaturedImage()
+    {
+        return !is_null($this->featuredImage) && !is_null($this->featuredImage->url);
+    }
+
+    // ADD THIS METHOD - Safe way to check gallery images
+    public function hasGalleryImages()
+    {
+        return $this->galleryImages->count() > 0;
+    }
 }

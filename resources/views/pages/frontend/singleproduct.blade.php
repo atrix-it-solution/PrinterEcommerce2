@@ -38,62 +38,44 @@
                 <div class="product_gallery">
                     <div id="product-gallery" class="slider-pro">
                         <div class="sp-slides">
-                            @if($product->galleryImages->count() > 0)
-                            @foreach($product->galleryImages as $index => $image)
+                            <!-- Featured Image Slide -->
+                            @if($product->hasFeaturedImage())
                             <div class="sp-slide">
-                                <a href="{{ Storage::url($image->file_path) }}" class="full_icon">
+                                <a href="{{ $product->featuredImage->url }}" class="full_icon">
                                     <i class="fa-solid fa-expand"></i>
                                 </a>
-                                <img class="sp-image img-fluid" src="{{ Storage::url($image->file_path) }}" alt="{{ $product->title }} - Image {{ $index + 1 }}" />
+                                <img class="sp-image img-fluid" src="{{ $product->featuredImage->url }}" alt="{{ $product->title }} - Featured Image" />
                             </div>
-                            @endforeach
                             @endif
 
+                            <!-- Gallery Images -->
+                            @if($product->hasGalleryImages())
+                                @foreach($product->galleryImages as $index => $image)
+                                    <div class="sp-slide">
+                                        <a href="{{ Storage::url($image->file_path) }}" class="full_icon">
+                                            <i class="fa-solid fa-expand"></i>
+                                        </a>
+                                        <img class="sp-image img-fluid" src="{{ Storage::url($image->file_path) }}" alt="{{ $product->title }} - Image {{ $index + 1 }}" />
+                                    </div>
+                                @endforeach
+                            @endif
 
-                            <!-- <div class="sp-slide">
-                                <a href="{{ asset('assets/images/product_img1.jpg') }}" class="full_icon">
-                                    <i class="fa-solid fa-expand"></i>
-                                </a>
-                                <img class="sp-image img-fluid" src="{{asset ('assets/images/product_img1.jpg')}}" data-src="{{asset ('assets/images/product_img1.jpg')}}" alt="Product image 1" />
-                            </div>
-
-                            
-                            <div class="sp-slide">
-                                <a href="{{ asset('assets/images/product_img11.jpg') }}" class="full_icon">
-                                    <i class="fa-solid fa-expand"></i>
-                                </a>
-                                <img class="sp-image img-fluid" src="{{asset ('assets/images/product_img11.jpg')}}" data-src="{{asset ('assets/images/product_img11.jpg')}}" alt="Product image 2" />
-                            </div>
-
-                            
-                            <div class="sp-slide">
-                                <a href="{{ asset('assets/images/product_img2.jpg') }}" class="full_icon">
-                                    <i class="fa-solid fa-expand"></i>
-                                </a>
-                                <img class="sp-image img-fluid" src="{{asset ('assets/images/product_img2.jpg')}}" data-src="{{asset ('assets/images/product_img2.jpg')}}" alt="Product image 3" />
-                            </div>
-
-                            
-                            <div class="sp-slide">
-                                <a href="{{ asset('assets/images/product_img3.jpg') }}" class="full_icon">
-                                    <i class="fa-solid fa-expand"></i>
-                                </a>
-                                <img class="sp-image img-fluid" src="{{asset ('assets/images/product_img3.jpg')}}" data-src="{{asset ('assets/images/product_img3.jpg')}}" alt="Product image 3" />
-                            </div> -->
-
+                        
                         </div>
 
                         <!-- Thumbnails -->
                         <div class="sp-thumbnails">
-                            @if($product->galleryImages->count() > 0)
-                            @foreach($product->galleryImages as $image)
-                            <img class="sp-thumbnail img-fluid" src="{{ Storage::url($image->file_path) }}" alt="{{ $product->title }} thumbnail" />
-                            @endforeach
+                            <!-- Featured Image Thumbnail -->
+                            @if($product->hasFeaturedImage())
+                            <img class="sp-thumbnail img-fluid" src="{{ $product->featuredImage->url }}" alt="{{ $product->title }} thumbnail" />
                             @endif
-                            <!-- <img class="sp-thumbnail img-fluid" src="{{asset ('assets/images/product_img1.jpg')}}" alt="Product Thumb 1" />
-                            <img class="sp-thumbnail img-fluid" src="{{asset ('assets/images/product_img11.jpg')}}" alt="Product Thumb 2" />
-                            <img class="sp-thumbnail img-fluid" src="{{asset ('assets/images/product_img2.jpg')}}" alt="Product Thumb 3" />
-                            <img class="sp-thumbnail img-fluid" src="{{asset ('assets/images/product_img3.jpg')}}" alt="Product Thumb 3" /> -->
+
+                            <!-- Gallery Image Thumbnails -->
+                            @if($product->hasGalleryImages())
+                                @foreach($product->galleryImages as $image)
+                                    <img class="sp-thumbnail img-fluid" src="{{ Storage::url($image->file_path) }}" alt="{{ $product->title }} thumbnail" />
+                                @endforeach
+                            @endif
                         </div>
                     </div>
 
@@ -195,9 +177,9 @@
         <div class="cusheading_row text-center pb-4">
             <h2>Related products</h2>
         </div>
-        <ul class="productlist column-lg-4 col-6">
+        <div class="productlist row ">
             @foreach($relatedProducts as $relatedProduct)
-            <li>
+            <div class="col-lg-3 col-6">
                 <div class="product_box">
                     <a href="{{ route('product.show', $relatedProduct->slug) }}" class="product_img">
                         @if($relatedProduct->featuredImage)
@@ -247,14 +229,18 @@
                         </div>
                     </div>
                 </div>
-            </li>
+            </div>
             @endforeach
 
-        </ul>
+</div>
     </div>
 </section>
 @endif
 
+
+@endsection
+
+@section('scripts')
 <!-- Slider Pro JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slider-pro/1.5.0/js/jquery.sliderPro.min.js"></script>
 <!-- LightGallery JS -->
@@ -264,16 +250,11 @@
 <script src="{{ asset('assets/frontend/js/wishlist.js') }}"></script>
 
 <script>
-    
-
-
-
-
-    // Slider Pro initialization
+// Slider Pro initialization
     jQuery(document).ready(function($) {
         $('#product-gallery').sliderPro({
             width: '100%',
-            height: 650,
+            height: 495,
             fade: true,
             arrows: true,
             buttons: false,

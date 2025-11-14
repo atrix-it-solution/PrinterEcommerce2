@@ -1,8 +1,8 @@
     <!-- Products will be loaded here via AJAX -->
 
-    <ul class="productlist column-3">
+    <div class="productlist row gy-4">
         @foreach($products as $product)
-        <li>
+        <div class="col-lg-4 col-6">
             <div class="product_box">
                 
                     <a href="/product/{{ $product->slug }}" class="product_img">
@@ -57,9 +57,9 @@
                     </div>
                 </div>
             </div>
-        </li>
+        </div>
         @endforeach
-    </ul>
+</div>
 
     <!-- Initial Pagination -->
     @if($products->hasPages())
